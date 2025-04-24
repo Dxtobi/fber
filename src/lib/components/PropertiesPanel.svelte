@@ -17,7 +17,12 @@
     { label: 'Border', property: 'border', type: 'text' },
     { label: 'Border Radius', property: 'border-radius', type: 'text' },
     { label: 'Font Size', property: 'font-size', type: 'text' },
-    { label: 'Font Weight', property: 'font-weight', type: 'text' },
+    { label: 'Font Weight', property: 'font-weight', type: 'text', default: 'normal' },
+    { label: 'Text Align', property: 'text-align', type: 'text', default: 'left' },
+    { label: 'Display', property: 'display', type: 'text', default: 'block' },
+    { label: 'Position', property: 'position', type: 'text', default: 'relative' },
+    { label: 'Overflow', property: 'overflow', type: 'text', default: 'visible' },
+    { label: 'Z-Index', property: 'z-index', type: 'text', default: 'auto' },
   ];
 
   // Reactive Variables
@@ -85,12 +90,15 @@
   }
 
   function handleAttributeChange(property, value) {
+    console.log(property, value)
     updateElement($selectedElement.id, {
       attributes: {
         ...$selectedElement.attributes,
         [property]: value,
       },
     });
+    console.log($selectedElement)
+
   }
 
   // Handlers for Managing Options (e.g., Voting or Test Components)
@@ -139,9 +147,9 @@
 </script>
 
 <!-- Property Panel UI -->
-<div class="w-[30%] h-full bg-gray-100 p-4 overflow-y-auto">
+<div class="w-[30%] h-full  p-4 overflow-y-auto">
   {#if $selectedElement && elementType}
-    <h2 class="text-xl font-bold mb-4">Properties</h2>
+    <h2 class="text-xl font-bold mb-4">{$selectedElement.type}</h2>
 
     <!-- Position Controls -->
     <div class="mb-4">
@@ -170,8 +178,8 @@
 
     <!-- Custom Attributes Section -->
     {#if elementType.editableProperties?.length}
-      <div class="mb-4">
-        <h3 class="font-semibold mb-2">Element Settings</h3>
+      <div class="mb-4 p-4 rounded-xl bg-purple-100">
+        <h3 class="font-semibold mb-2 text-purple-800">Element Settings</h3>
         <div class="space-y-3">
           {#each elementType.editableProperties as attr}
             {#if attr.type === 'checkbox'}
@@ -179,7 +187,7 @@
                 <input
                   type="checkbox"
                   id={attr.property}
-                  class="mr-2"
+                  class="mr-2 border-purple-600"
                   checked={$selectedElement.attributes?.[attr.property] ?? attr.defaultValue}
                   on:change={(e) => handleAttributeChange(attr.property, e.target.checked)}
                 />
@@ -192,11 +200,11 @@
                   {#each $selectedElement.attributes?.options || attr.defaultValue || [] as option, index (index)}
                     {#if $selectedElement.type != 'VOTING'}
                       <!-- Test Component Options (with Correct/Incorrect Flags) -->
-                      <div class="space-y-1 border p-2 rounded">
+                      <div class="space-y-1 border-none p-2 rounded bg-purple-300">
                         <div class="flex">
                           <input
                             type="text"
-                            class="flex-1 p-1 border rounded"
+                            class="flex-1 p-1 border-none rounded bg-purple-400 text-white"
                             value={option.text}
                             on:input={(e) => handleTestOptionChange(index, 'text', e.target.value)}
                           />
@@ -205,7 +213,7 @@
                           <input
                             type="checkbox"
                             id={`correct-${index}`}
-                            class="mr-2"
+                            class="mr-2 bg-purple-700"
                             checked={option.correct}
                             on:change={(e) => handleTestOptionChange(index, 'correct', e.target.checked)}
                           />
@@ -244,7 +252,9 @@
                   + Add Option
                 </button>
               </div>
-            {:else}
+            
+           
+              {:else}
               <div>
                 <label class="block text-sm">{attr.label}</label>
                 <input
@@ -261,7 +271,7 @@
     {/if}
 
     <!-- Styles Section -->
-    <div class="mb-4">
+    <div class="mb-4 p-4 bg-gray-200 rounded-xl">
       <h3 class="font-semibold mb-2">Styles</h3>
       <div class="space-y-3">
         {#each styleProperties as prop}
@@ -270,14 +280,14 @@
             {#if prop.type === 'color'}
               <input
                 type="color"
-                class="w-full h-10"
+                class="w-full h-10 border-none"
                 value={$selectedElement.styles[prop.property] || elementType.defaultStyles?.[prop.property] || ''}
                 on:input={(e) => handleStyleChange(prop.property, e.target.value)}
               />
             {:else}
               <input
                 type="text"
-                class="w-full p-2 border rounded"
+                class="w-full p-2 border rounded border-none"
                 value={$selectedElement.styles[prop.property] || elementType.defaultStyles?.[prop.property] || ''}
                 on:input={(e) => handleStyleChange(prop.property, e.target.value)}
               />

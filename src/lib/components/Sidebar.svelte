@@ -4,10 +4,8 @@
   
     const elementTypes = Object.values(ELEMENT_TYPES);
   
-    /**
-	 * @param {DragEvent & { currentTarget: EventTarget & HTMLButtonElement; }} event
-	 * @param {{ type: string; label: string; component: string; defaultStyles: { width: string; padding: string; 'border-radius': string; border: string; }; } | { type: string; label: string; component: string; defaultStyles: { width: string; padding: string; 'border-radius': string; border: string; 'background-color': string; color: string; cursor: string; }; } | { type: string; label: string; component: string; defaultStyles: { width: string; height: string; }; } | { type: string; label: string; component: string; defaultStyles: { width: string; padding: string; 'background-color': string; 'border-radius': string; }; } | { type: string; label: string; component: string; defaultStyles: { width: string; padding: string; 'background-color': string; 'border-radius': string; }; }} elementType
-	 */
+   
+    // @ts-ignore
     function handleDragStart(event, elementType) {
       // @ts-ignore
       event.dataTransfer.setData('text/plain', JSON.stringify(elementType));

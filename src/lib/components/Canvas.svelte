@@ -6,6 +6,7 @@
   import Button from './FormElements/Button.svelte';
   import VotingComponent from './VotingComponent.svelte';
   import TestComponent from './TestComponent.svelte';
+  import TextComponent from './FormElements/TextComponent.svelte';
   import FormPreview from './FormPreview.svelte';
   import { onMount, onDestroy } from 'svelte';
 
@@ -15,6 +16,7 @@
     Button,
     VotingComponent,
     TestComponent,
+    TextComponent
   };
 
   // Editor State
@@ -222,7 +224,7 @@
                                 linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
               background-position: -1px -1px;
             "
-          />
+          ></div>
         </div>
 
         <!-- Draggable Elements -->
@@ -230,7 +232,7 @@
           {@const Comp = components[element.component]}
           {#if Comp}
             <div
-              class="editor-element-wrapper"
+              class="editor-element-wrapper hover:outline-1"
               style={getEditorElementStyle(element)}
               on:pointerdown|stopPropagation={(e) => handlePointerDown(e, element)}
               data-element-id={element.id}
@@ -239,7 +241,7 @@
               aria-grabbed={draggingInfo?.elementId === element.id}
               title={`ID: ${element.id} Pos: (${element.position?.x ?? 'N/A'}, ${element.position?.y ?? 'N/A'})`}
             >
-              <div class="w-full h-full pointer-events-none relative hover:outline hover:outline-2 hover:outline-blue-300 hover:outline-offset-[-1px]">
+              <div class="w-full h-full pointer-events-none relative hover:outline-2 hover:outline-blue-300 hover:outline-offset-[-1px] border">
                 <svelte:component
                   this={Comp}
                   {element}
@@ -266,7 +268,7 @@
   </div>
 </div>
 
-<!-- Property Panel -->
+
 
 
 <style>

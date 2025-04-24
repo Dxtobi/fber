@@ -243,5 +243,28 @@ export const ELEMENT_TYPES = {
               defaultValue: 'YYYY-MM-DD'
           }
       ]
+  },
+  TEXT: {
+    svg: text, // Import the corresponding SVG icon
+    type: 'TEXT',
+    label: 'Text',
+    component: 'TextComponent',
+    defaultStyles: {
+      width: '200px',
+      padding: '8px',
+      'font-size': '16px',
+      'font-weight': 'normal',
+      color: '#333',
+      'text-align': 'left',
+      margin: '0px'
+    },
+    editableProperties: [
+      {
+        label: 'Text Content',
+        property: 'content',
+        type: 'text',
+        defaultValue: 'Sample Text'
+      },
+    ]
   }
   };
