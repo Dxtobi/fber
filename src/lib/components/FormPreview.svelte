@@ -169,14 +169,14 @@
   
     <!-- Preview Viewport Wrapper (for scaling) -->
     <div class="flex-1 flex justify-center items-start overflow-auto">
-      <div class="preview-viewport" style={viewportStyle}>
+      <div class="preview-viewport p-20" style={viewportStyle}>
         <!-- Render Elements Directly (Simpler, uses parent styles) -->
         {#each $formStore.elements as element (element.id)}
           {@const Comp = components[element.component]}
           {#if Comp}
             <div
-              class="preview-element"
-              style={getElementStyleString(element)}
+              class="preview-element p-1"
+              
               data-element-id={element.id}
             >
               <!-- Render the actual component -->

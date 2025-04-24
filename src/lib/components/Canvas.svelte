@@ -1,29 +1,23 @@
 <script>
   //@ts-nocheck
-  import { formStore, updateElement, selectElement } from '$lib/stores/formStore';
-  // Import your actual components
+  import { formStore, updateElement, selectElement, deleteElement, selectedElement } from '$lib/stores/formStore';
+  import { ELEMENT_TYPES } from '../utils/elementTypes';
   import TextInput from './FormElements/TextInput.svelte';
   import Button from './FormElements/Button.svelte';
-  // import Checkbox from './FormElements/Checkbox.svelte'; // Assuming you have this
   import VotingComponent from './VotingComponent.svelte';
   import TestComponent from './TestComponent.svelte';
+  import FormPreview from './FormPreview.svelte';
   import { onMount, onDestroy } from 'svelte';
 
-  // Import the new Preview Component
-  import FormPreview from './FormPreview.svelte'; // Assuming FormPreview.svelte is in the same directory
-
-  // --- Component Map ---
-  // Make sure this map is comprehensive for both editor and preview
+  // Component Map
   const components = {
     TextInput,
     Button,
-    // Checkbox, // Add if you have it
     VotingComponent,
     TestComponent,
-    // Add other component types used in ELEMENT_TYPES here
   };
 
-  // --- Editor State ---
+  // Editor State
   export let gridSize = 40; // Grid size in pixels
   let viewMode = 'editor'; // 'editor' or 'preview'
   let canvasRef;
@@ -31,38 +25,26 @@
   let draggingInfo = null; // { elementId: number, offset: {x: number, y: number}, elementPixelW: number, elementPixelH: number } | null
   let resizeObserver;
 
-
-  // --- Helper Functions (Snap, Collision Check) ---
-
+  // Helper Functions
   function snapToGrid(value) {
-    // Ensure gridSize is positive to avoid division by zero or NaN
     if (gridSize <= 0) return value;
     return Math.round(value / gridSize) * gridSize;
   }
 
   function isOccupied(targetPixelX, targetPixelY, elementIdToExclude) {
-    // Assuming 1x1 grid cell size for collision detection for now
-    // !!! IMPORTANT: Update this if implementing element sizing !!!
     const elementPixelW = gridSize;
     const elementPixelH = gridSize;
-
     const targetRight = targetPixelX + elementPixelW;
     const targetBottom = targetPixelY + elementPixelH;
-
     for (const el of $formStore.elements) {
       if (el.id === elementIdToExclude) continue;
-
-      // Ensure other element has valid position
       if (!el.position || typeof el.position.x !== 'number' || typeof el.position.y !== 'number') continue;
-
       const elPixelX = snapToGrid(el.position.x);
       const elPixelY = snapToGrid(el.position.y);
-      const elRight = elPixelX + elementPixelW; // Assumes 1x1
-      const elBottom = elPixelY + elementPixelH; // Assumes 1x1
-
+      const elRight = elPixelX + elementPixelW;
+      const elBottom = elPixelY + elementPixelH;
       const horizontalOverlap = targetPixelX < elRight && targetRight > elPixelX;
       const verticalOverlap = targetPixelY < elBottom && targetBottom > elPixelY;
-
       if (horizontalOverlap && verticalOverlap) {
         return true;
       }
@@ -70,33 +52,21 @@
     return false;
   }
 
-  // --- Event Handlers (Pointer Down, Move, Up) ---
-
+  // Event Handlers
   function handlePointerDown(event, element) {
-    if (viewMode !== 'editor') return; // Dragging only in editor mode
+    if (viewMode !== 'editor') return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     event.stopPropagation();
     selectElement(element.id);
-
-    if (!element.position || typeof element.position.x !== 'number' || typeof element.position.y !== 'number') {
-      console.error("Element missing valid position:", element);
-      return;
-    }
-
     const pointerPosition = { x: event.clientX, y: event.clientY };
     const offset = {
-        x: pointerPosition.x - canvasBounds.left - element.position.x,
-        y: pointerPosition.y - canvasBounds.top - element.position.y
+      x: pointerPosition.x - canvasBounds.left - element.position.x,
+      y: pointerPosition.y - canvasBounds.top - element.position.y,
     };
-
-    const elementPixelW = gridSize; // Assume 1x1
-    const elementPixelH = gridSize; // Assume 1x1
-
+    const elementPixelW = gridSize;
+    const elementPixelH = gridSize;
     draggingInfo = { elementId: element.id, offset, elementPixelW, elementPixelH };
-
     document.body.style.cursor = 'move';
-    event.currentTarget.style.cursor = 'move';
-
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
     window.addEventListener('pointercancel', handlePointerUp);
@@ -105,87 +75,63 @@
   function handlePointerMove(event) {
     if (!draggingInfo || viewMode !== 'editor') return;
     event.preventDefault();
-
     const { elementId, offset, elementPixelW, elementPixelH } = draggingInfo;
     const pointerPosition = { x: event.clientX, y: event.clientY };
-
     const rawPixelX = pointerPosition.x - canvasBounds.left - offset.x;
     const rawPixelY = pointerPosition.y - canvasBounds.top - offset.y;
-
     let snappedPixelX = snapToGrid(rawPixelX);
     let snappedPixelY = snapToGrid(rawPixelY);
-
     snappedPixelX = Math.max(0, Math.min(snappedPixelX, canvasBounds.width - elementPixelW));
     snappedPixelY = Math.max(0, Math.min(snappedPixelY, canvasBounds.height - elementPixelH));
-    snappedPixelX = Math.max(0, snappedPixelX);
-    snappedPixelY = Math.max(0, snappedPixelY);
-
-    // Find the current element's position to prevent unnecessary updates
     const currentElement = $formStore.elements.find(el => el.id === elementId);
     const currentX = currentElement ? snapToGrid(currentElement.position.x) : -Infinity;
     const currentY = currentElement ? snapToGrid(currentElement.position.y) : -Infinity;
-
-    // Only check collision and update if the snapped position has actually changed
     if (snappedPixelX !== currentX || snappedPixelY !== currentY) {
-       if (!isOccupied(snappedPixelX, snappedPixelY, elementId)) {
-            updateElement(elementId, {
-                position: { x: snappedPixelX, y: snappedPixelY },
-            });
-       }
+      if (!isOccupied(snappedPixelX, snappedPixelY, elementId)) {
+        updateElement(elementId, {
+          position: { x: snappedPixelX, y: snappedPixelY },
+        });
+      }
     }
   }
 
   function handlePointerUp(event) {
-     if (!draggingInfo) return; // Check needed in case pointerup fires without corresponding down in edge cases
-
-     const elementNode = canvasRef?.querySelector(`[data-element-id="${draggingInfo.elementId}"]`);
-     if(elementNode) {
-        elementNode.style.cursor = 'move';
-     }
-
-     draggingInfo = null;
-     document.body.style.cursor = '';
-     window.removeEventListener('pointermove', handlePointerMove);
-     window.removeEventListener('pointerup', handlePointerUp);
-     window.removeEventListener('pointercancel', handlePointerUp);
+    if (!draggingInfo) return;
+    draggingInfo = null;
+    document.body.style.cursor = '';
+    window.removeEventListener('pointermove', handlePointerMove);
+    window.removeEventListener('pointerup', handlePointerUp);
+    window.removeEventListener('pointercancel', handlePointerUp);
   }
 
-
-  // --- Lifecycle & Resize ---
-
+  // Lifecycle & Resize
   function updateCanvasBounds() {
-    // Use canvasRef if in editor mode, otherwise maybe the preview container ref?
-    // For simplicity, let's assume the main container's bounds are relevant for clamping.
-     const container = canvasRef; // Or potentially a different ref if preview has its own outer scroll container
-     if (container) {
-       const rect = container.getBoundingClientRect();
-       canvasBounds = {
-         width: container.offsetWidth,
-         height: container.offsetHeight,
-         left: rect.left,
-         top: rect.top,
-       };
-     }
+    const container = canvasRef;
+    if (container) {
+      const rect = container.getBoundingClientRect();
+      canvasBounds = {
+        width: container.offsetWidth,
+        height: container.offsetHeight,
+        left: rect.left,
+        top: rect.top,
+      };
+    }
   }
 
   onMount(() => {
-    // Need a reference to the container that defines the bounds for editor OR preview
-    const mainContainer = document.getElementById('editor-preview-container'); // Give the main div an ID
-
+    const mainContainer = document.getElementById('editor-preview-container');
     if (mainContainer) {
       resizeObserver = new ResizeObserver(() => {
         updateCanvasBounds();
       });
       resizeObserver.observe(mainContainer);
-      requestAnimationFrame(updateCanvasBounds); // Initial calculation
+      requestAnimationFrame(updateCanvasBounds);
     }
-
     return () => {
       if (resizeObserver && mainContainer) {
-         resizeObserver.unobserve(mainContainer);
+        resizeObserver.unobserve(mainContainer);
       }
       resizeObserver = null;
-      // Cleanup global listeners just in case
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
       window.removeEventListener('pointercancel', handlePointerUp);
@@ -193,45 +139,40 @@
     };
   });
 
-  // --- Editor Element Style Calculation ---
+  // Editor Element Style Calculation
   function getEditorElementStyle(element) {
-      const elementPixelW = gridSize; // Assume 1x1
-      const elementPixelH = gridSize; // Assume 1x1
-
-      const posX = element.position?.x ?? 0;
-      const posY = element.position?.y ?? 0;
-
-      const snappedX = snapToGrid(posX);
-      const snappedY = snapToGrid(posY);
-
-      // Clamp using the latest canvasBounds
-      const clampedX = Math.max(0, Math.min(snappedX, (canvasBounds.width || Number.MAX_SAFE_INTEGER) - elementPixelW));
-      const clampedY = Math.max(0, Math.min(snappedY, (canvasBounds.height || Number.MAX_SAFE_INTEGER) - elementPixelH));
-
-      const isDragging = draggingInfo?.elementId === element.id;
-      const isSelected = $formStore.selectedElementId === element.id;
-
-      return `
-        position: absolute;
-        left: ${clampedX}px;
-        top: ${clampedY}px;
-        width: ${elementPixelW}px;
-        height: ${elementPixelH}px;
-        touch-action: none;
-        border: 1px solid transparent;
-        transition: transform 50ms ease-out, box-shadow 150ms ease-out, border-color 150ms ease-out;
-        z-index: ${isDragging ? 30 : (isSelected ? 25 : 20)};
-        ${isDragging ? 'box-shadow: 0 4px 8px rgba(0,0,0,0.2); transform: scale(1.02);' : ''}
-        ${isSelected ? 'border-color: #3b82f6; border-width: 2px; margin: -1px;' : ''}
-        cursor: move;
-      `;
+    const elementPixelW = gridSize;
+    const elementPixelH = gridSize;
+    const posX = element.position?.x ?? 0;
+    const posY = element.position?.y ?? 0;
+    const snappedX = snapToGrid(posX);
+    const snappedY = snapToGrid(posY);
+    const clampedX = Math.max(0, Math.min(snappedX, (canvasBounds.width || Number.MAX_SAFE_INTEGER) - elementPixelW));
+    const clampedY = Math.max(0, Math.min(snappedY, (canvasBounds.height || Number.MAX_SAFE_INTEGER) - elementPixelH));
+    const isDragging = draggingInfo?.elementId === element.id;
+    const isSelected = $formStore.selectedElementId === element.id;
+    return `
+      position: absolute;
+      left: ${clampedX}px;
+      top: ${clampedY}px;
+      width: ${elementPixelW}px;
+      height: ${elementPixelH}px;
+      touch-action: none;
+      border: 1px solid transparent;
+      transition: transform 50ms ease-out, box-shadow 150ms ease-out, border-color 150ms ease-out;
+      z-index: ${isDragging ? 30 : (isSelected ? 25 : 20)};
+      ${isDragging ? 'box-shadow: 0 4px 8px rgba(0,0,0,0.2); transform: scale(1.02);' : ''}
+      ${isSelected ? 'border-color: #3b82f6; border-width: 2px; margin: -1px;' : ''}
+      cursor: move;
+    `;
   }
+
+ 
 
 </script>
 
-<!-- Main Component Layout -->
+<!-- Main Layout -->
 <div class="flex flex-col h-full w-[90%] relative">
-
   <!-- View Mode Toggle -->
   <div class="flex justify-center p-2 border-b bg-gray-50 rounded-t-lg">
     <button
@@ -259,19 +200,17 @@
     >
       Preview
     </button>
-   
   </div>
 
   <!-- Container for Editor Canvas OR Preview Area -->
   <div id="editor-preview-container" class="flex-1 relative overflow-auto border-l border-r border-b border-gray-300 rounded-b-lg">
-
     {#if viewMode === 'editor'}
       <!-- EDITOR VIEW -->
       <div
         class="editor-canvas min-h-full min-w-full bg-gray-50 relative"
         bind:this={canvasRef}
         style="touch-action: none;"
-        on:pointerdown={() => selectElement(null)} 
+        on:pointerdown={() => selectElement(null)}
       >
         <!-- Grid Visualization -->
         <div class="absolute inset-0 pointer-events-none z-0">
@@ -300,23 +239,20 @@
               aria-grabbed={draggingInfo?.elementId === element.id}
               title={`ID: ${element.id} Pos: (${element.position?.x ?? 'N/A'}, ${element.position?.y ?? 'N/A'})`}
             >
-              <!-- Inner div prevents pointer events on component from interfering with drag -->
-              <!-- It also provides the hover effect separate from selection/drag state -->
-               <div class="w-full h-full pointer-events-none relative hover:outline hover:outline-2 hover:outline-blue-300 hover:outline-offset-[-1px]">
-                 <svelte:component
-                    this={Comp}
-                    {element}
-                    props={element.props || {}}
-                    styles={element.styles || {}}
-                    isDisabled={true} 
-                    class="w-full h-full object-cover opacity-70"
-                  />
+              <div class="w-full h-full pointer-events-none relative hover:outline hover:outline-2 hover:outline-blue-300 hover:outline-offset-[-1px]">
+                <svelte:component
+                  this={Comp}
+                  {element}
+                  props={element.props || {}}
+                  styles={element.styles || {}}
+                  isDisabled={true}
+                  class="w-full h-full object-cover opacity-70"
+                />
               </div>
             </div>
           {:else}
-            <!-- Placeholder for unknown component types in editor -->
             <div style={getEditorElementStyle(element)} class="flex items-center justify-center bg-red-100 border border-red-400 text-xs text-red-700 p-1">
-               Unknown: {element.component || 'N/A'}
+              Unknown: {element.component || 'N/A'}
             </div>
           {/if}
         {/each}
@@ -324,35 +260,33 @@
     {/if}
 
     {#if viewMode === 'preview'}
-       <!-- PREVIEW VIEW -->
-       <!-- The FormPreview component takes care of rendering -->
-       <!-- It reads directly from the store -->
-       <FormPreview />
+      <!-- PREVIEW VIEW -->
+      <FormPreview />
     {/if}
-
   </div>
-
 </div>
+
+<!-- Property Panel -->
+
 
 <style>
   /* Styles specific to the editor view elements */
   .editor-element-wrapper {
-     box-sizing: border-box;
+    box-sizing: border-box;
   }
-  /* Hover style applied via inner div's hover pseudo-class */
 
- /* Ensure selected outline overrides hover on inner div */
- .editor-element-wrapper[style*="border-color: #3b82f6"] .hover\:outline {
+  /* Hover style applied via inner div's hover pseudo-class */
+  .editor-element-wrapper[style*="border-color: #3b82f6"] .hover\:outline {
     outline: none !important;
- }
- /* Ensure dragging element has no hover outline on inner div */
+  }
+
+  /* Ensure dragging element has no hover outline on inner div */
   .editor-element-wrapper[style*="z-index: 30"] .hover\:outline {
-     outline: none !important;
+    outline: none !important;
   }
 
   /* General container style if needed */
   #editor-preview-container {
-      background-color: #f9fafb; /* Light bg for the container */
+    background-color: #f9fafb; /* Light bg for the container */
   }
-
 </style>

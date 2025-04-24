@@ -21,7 +21,7 @@ export const ELEMENT_TYPES = {
         padding: '8px',
         'border-radius': '4px',
         border: '1px solid #ccc',
-        margin:'10px 20px'
+        margin:'0px'
       },
       editableProperties: [
         {
@@ -47,8 +47,9 @@ export const ELEMENT_TYPES = {
         width: '300px',
         padding: '10px 20px',
         'border-radius': '4px',
-        border: 'none',
+        border: '1px solid gray',
         'background-color': '#4CAF50',
+        'hover-background-color': '#45a049', 
         color: 'white',
         cursor: 'pointer'
       },
@@ -64,7 +65,14 @@ export const ELEMENT_TYPES = {
           property: 'disabled',
           type: 'checkbox',
           defaultValue: false
+        },
+        {
+          label: 'Type',
+          property: 'submit',
+          type: 'text',
+          defaultValue: 'submit'
         }
+
       ]
     },
     VOTING: {

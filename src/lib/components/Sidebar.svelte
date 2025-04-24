@@ -20,14 +20,14 @@
     <div class="space-y-2 flex flex-wrap gap-4">
       {#each elementTypes as elementType}
         <button
-          class="p-3 bg-white rounded shadow cursor-move hover:bg-gray-50"
+          class="p-3 bg-white rounded shadow cursor-move hover:bg-gray-50 w-[60px]  h-[60px] grid place-content-center"
           draggable="true"
           on:dragstart={(e) => handleDragStart(e, elementType)}
           on:click={() => addElement(elementType)}
           on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && addElement(elementType)}
           aria-label={`Add ${elementType.label}`}
         >
-          <span>
+          <span >
             <svelte:component this={elementType.svg} />
           </span>
         </button>
