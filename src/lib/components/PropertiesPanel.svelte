@@ -198,7 +198,7 @@
                 <label class="block text-sm mb-1">{attr.label}</label>
                 <div class="space-y-2 mb-2">
                   {#each $selectedElement.attributes?.options || attr.defaultValue || [] as option, index (index)}
-                    {#if $selectedElement.type != 'VOTING'}
+                    {#if $selectedElement.type == 'TEST'}
                       <!-- Test Component Options (with Correct/Incorrect Flags) -->
                       <div class="space-y-1 border-none p-2 rounded bg-purple-300">
                         <div class="flex">
@@ -226,7 +226,8 @@
                           Remove Option
                         </button>
                       </div>
-                    {:else}
+                     
+                      {:else}
                       <!-- Voting Component Simple Options -->
                       <div class="flex items-center">
                         <input

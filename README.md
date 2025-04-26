@@ -1,38 +1,75 @@
-# sv
+# SvelteKit Form Builder Project Structure
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+form-builder/
+├── src/
+│   ├── components/
+│   │   ├── canvas/
+│   │   │   ├── Canvas.svelte
+│   │   │   ├── ComponentPreview.svelte
+│   │   │   └── Sidebar.svelte
+│   │   ├── form-elements/
+│   │   │   ├── TextInput.svelte
+│   │   │   ├── Button.svelte
+│   │   │   ├── VotingComponent.svelte
+│   │   │   ├── TestComponent.svelte
+│   │   │   ├── SectionDivider.svelte
+│   │   │   ├── MultiStepContainer.svelte
+│   │   │   ├── FileUpload.svelte
+│   │   │   ├── DatePicker.svelte
+│   │   │   └── TextComponent.svelte
+│   │   ├── editor/
+│   │   │   ├── PropertyEditor.svelte
+│   │   │   └── StyleEditor.svelte
+│   │   └── preview/
+│   │       ├── FormPreview.svelte
+│   │       └── StepNavigation.svelte
+│   ├── lib/
+│   │   ├── svgs/
+│   │   │   ├── datepicker.svelte
+│   │   │   ├── textinput.svelte
+│   │   │   ├── buttonicon.svelte
+│   │   │   ├── vote.svelte
+│   │   │   ├── text.svelte
+│   │   │   ├── dividers.svelte
+│   │   │   ├── multisteps.svelte
+│   │   │   ├── fileupload.svelte
+│   │   │   └── qa.svelte
+│   │   ├── db/
+│   │   │   ├── client.js
+│   │   │   ├── forms.js
+│   │   │   └── submissions.js
+│   │   └── utils.js
+│   ├── routes/
+│   │   ├── +layout.svelte
+│   │   ├── +page.svelte
+│   │   ├── builder/
+│   │   │   ├── +page.svelte
+│   │   │   └── +page.server.js
+│   │   ├── forms/
+│   │   │   ├── [id]/
+│   │   │   │   ├── +page.svelte
+│   │   │   │   └── +page.server.js
+│   │   │   ├── +page.svelte
+│   │   │   └── +page.server.js
+│   │   ├── dashboard/
+│   │   │   ├── +page.svelte
+│   │   │   └── +page.server.js
+│   │   └── api/
+│   │       ├── forms/
+│   │       │   ├── +server.js
+│   │       │   └── [id]/
+│   │       │       ├── +server.js
+│   │       │       └── submissions/+server.js
+│   │       └── submissions/+server.js
+│   └── stores/
+│       ├── formStore.js
+│       └── uiStore.js
+├── static/
+│   └── favicon.png
+├── .env
+├── .gitignore
+├── package.json
+├── svelte.config.js
+└── vite.config.js
 ```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

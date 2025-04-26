@@ -8,7 +8,11 @@
   import TestComponent from './TestComponent.svelte';
   import TextComponent from './FormElements/TextComponent.svelte';
   import FormPreview from './FormPreview.svelte';
+  import DatePicker from "./FormElements/DatePicker.svelte"
+
   import { onMount, onDestroy } from 'svelte';
+	import FileUpload from './FormElements/FileUpload.svelte';
+	import MultiStepContainer from './FormElements/MultiStepContainer.svelte';
 
   // Component Map
   const components = {
@@ -16,7 +20,10 @@
     Button,
     VotingComponent,
     TestComponent,
-    TextComponent
+    TextComponent,
+    DatePicker,
+    FileUpload,
+    MultiStepContainer,
   };
 
   // Editor State

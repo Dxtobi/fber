@@ -7,17 +7,25 @@
     // import Checkbox from './FormElements/Checkbox.svelte'; // Add if used
     import VotingComponent from './VotingComponent.svelte';
     import TestComponent from './TestComponent.svelte';
-    import { onDestroy } from 'svelte';
   
-    // --- Component Map ---
-    // Ensure this map includes all components your form might use
-    const components = {
-      TextInput,
-      Button,
-      // Checkbox,
-      VotingComponent,
-      TestComponent,
-    };
+  import TextComponent from './FormElements/TextComponent.svelte';
+  import FormPreview from './FormPreview.svelte';
+  import DatePicker from "./FormElements/DatePicker.svelte"
+  import { onMount, onDestroy } from 'svelte';
+	import FileUpload from './FormElements/FileUpload.svelte';
+	import MultiStepContainer from './FormElements/MultiStepContainer.svelte';
+
+  // Component Map
+  const components = {
+    TextInput,
+    Button,
+    VotingComponent,
+    TestComponent,
+    TextComponent,
+    DatePicker,
+    FileUpload,
+    MultiStepContainer,
+  };
   
     // --- Preview State ---
     let previewMode = 'desktop'; // 'desktop', 'tablet', 'mobile'

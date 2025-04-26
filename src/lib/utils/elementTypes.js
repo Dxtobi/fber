@@ -82,7 +82,7 @@ export const ELEMENT_TYPES = {
       component: 'VotingComponent',
       defaultStyles: {
         width: '300px',
-        padding: '20px',
+        padding: '0px',
         'background-color': '#fff',
         'border-radius': '8px'
       },
@@ -165,30 +165,33 @@ export const ELEMENT_TYPES = {
   },
 
   MULTI_STEP_CONTAINER: {
-      svg:multisteps,
-      type: 'MULTI_STEP_CONTAINER',
-      label: 'Multi-Step Form',
-      component: 'MultiStepContainer',
-      defaultStyles: {
-          width: '100%',
-          padding: '20px',
-          'background-color': '#f9fafb',
-          'border-radius': '8px'
+    svg: multisteps,
+    type: 'MULTI_STEP_CONTAINER',
+    label: 'Multi-Step Form',
+    component: 'MultiStepContainer',
+    defaultStyles: {
+      width: '100%',
+      padding: '20px',
+      'background-color': '#f9fafb',
+      'border-radius': '8px',
+    },
+    editableProperties: [
+      {
+        label: 'Step Titles',
+        property: 'options',
+        type: 'array',
+        defaultValue: [
+          { title: 'Step 1', content: [] },
+          { title: 'Step 2', content: [] },
+        ],
       },
-      editableProperties: [
-          {
-              label: 'Step Titles',
-              property: 'steps',
-              type: 'array',
-              defaultValue: ['Step 1', 'Step 2']
-          },
-          {
-              label: 'Show Progress Bar',
-              property: 'showProgress',
-              type: 'checkbox',
-              defaultValue: true
-          }
-      ]
+      {
+        label: 'Show Progress Bar',
+        property: 'showProgress',
+        type: 'checkbox',
+        defaultValue: true,
+      },
+    ],
   },
 
   FILE_UPLOAD: {
@@ -225,7 +228,7 @@ export const ELEMENT_TYPES = {
       component: 'DatePicker',
       defaultStyles: {
           width: '300px',
-          padding: '8px',
+          
           'border-radius': '4px',
           border: '1px solid #ccc'
       },
