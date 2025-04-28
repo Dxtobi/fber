@@ -38,6 +38,12 @@
 		"@oslojs/crypto": "^1.0.1",
 		"@oslojs/encoding": "^1.1.0",
 		"drizzle-orm": "^0.40.0",
-		"postgres": "^3.4.5"
+		"mongodb": "^6.16.0",
+		"postgres": "^3.4.5",
+		"svelte-color-picker": "^1.0.7",
+		"svelte-dnd-action": "^0.9.61",
+		"svelte-icons": "^2.1.0",
+		"svelte-select": "^5.8.3",
+		"uuid": "^11.1.0"
 	}
 }

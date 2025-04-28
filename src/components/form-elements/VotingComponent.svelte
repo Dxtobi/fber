@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 
-	import { ELEMENT_TYPES } from "$lib/utils/elementTypes";
+	import { ELEMENT_TYPES } from "$lib/elementTypes";
 
     export let element;
     

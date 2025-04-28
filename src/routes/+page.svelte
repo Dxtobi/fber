@@ -1,8 +1,11 @@
 <script>
-    import Sidebar from '$lib/components/Sidebar.svelte';
-    import Canvas from '$lib/components/Canvas.svelte';
-    import PropertiesPanel from '$lib/components/PropertiesPanel.svelte';
+
     import { formStore } from '$lib/stores/formStore';
+	import Canvas from '../components/canvas/Canvas.svelte';
+
+	import Sidebar from '../components/canvas/Sidebar.svelte';
+	import PropertyEditor from '../components/editor/PropertyEditor.svelte';
+
     
     async function saveForm() {
     try {
@@ -65,6 +68,6 @@
     <main class="flex flex-1 overflow-hidden">
       <Sidebar />
       <Canvas />
-      <PropertiesPanel />
+      <PropertyEditor />
     </main>
   </div>

@@ -1,4 +1,6 @@
 <script>
+// @ts-nocheck
+
     export let element;
   
     // State for current step
@@ -6,6 +8,7 @@
   
     // Extract step titles and content from attributes
     $: steps = Array.isArray(element?.attributes?.steps)
+      // @ts-ignore
       // @ts-ignore
       ? element.attributes.steps.map((step, index) => ({
           ...step,
@@ -17,6 +20,7 @@
     $: showProgress = element?.attributes?.showProgress || true;
   
     // Handle navigation
+    // @ts-ignore
     function goToStep(index) {
       if (index >= 0 && index < steps.length) {
         currentStep = index;

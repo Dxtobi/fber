@@ -1,7 +1,7 @@
 <script>
   // @ts-nocheck
   export let element;
-	import { ELEMENT_TYPES } from "$lib/utils/elementTypes";
+	import { ELEMENT_TYPES } from "$lib/elementTypes";
   
   // Initialize with defaults from ELEMENT_TYPES if not set
   $: question = element.attributes?.question ?? 
