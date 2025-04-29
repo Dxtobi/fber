@@ -9,22 +9,14 @@ import multisteps from '$lib/svgs/multisteps.svelte';
 import fileupload from '$lib/svgs/fileupload.svelte';
 import qa from '$lib/svgs/qa.svelte';
 //COMPONENTS
-import TextInput from '../components/form-elements/TextInput.svelte';
-import Button from '../components/form-elements/Button.svelte';
-import VotingComponent from '../components/form-elements/VotingComponent.svelte';
-import TestComponent from '../components/form-elements/TestComponent.svelte';
-import SectionDivider from '../components/form-elements/SectionDivider.svelte';
-import MultiStepContainer from '../components/form-elements/MultiStepContainer.svelte';
-import FileUpload from '../components/form-elements/FileUpload.svelte';
-import DatePicker from '../components/form-elements/DatePicker.svelte';
-import TextComponent from '../components/form-elements/TextComponent.svelte';
+
 
 export const ELEMENT_TYPES = {
   TEXT_INPUT: {
     svg: textinput,
     type: 'TEXT_INPUT',
     label: 'Text Input',
-    component: TextInput,
+    component: 'TextInput',
     defaultStyles: {
       width: '100%',
       padding: '12px 16px',
@@ -67,7 +59,7 @@ export const ELEMENT_TYPES = {
     svg: buttonicon,
     type: 'BUTTON',
     label: 'Button',
-    component: Button,
+    component: 'Button',
     defaultStyles: {
       width: 'auto',
       padding: '8px 16px',
@@ -120,7 +112,7 @@ export const ELEMENT_TYPES = {
     svg: vote,
     type: 'VOTING',
     label: 'Poll',
-    component: VotingComponent,
+    component: 'VotingComponent',
     defaultStyles: {
       width: '100%',
       padding: '16px',
@@ -157,7 +149,7 @@ export const ELEMENT_TYPES = {
     svg: qa,
     type: 'TEST',
     label: 'Test Component',
-    component:TestComponent,
+    component:'TestComponent',
     defaultStyles: {
       width: '100%',
       padding: '16px',
@@ -197,7 +189,41 @@ export const ELEMENT_TYPES = {
     svg: dividers,
     type: 'SECTION_DIVIDER',
     label: 'Section Divider',
-    component: SectionDivider,
+    component: 'SectionDivider',
+    defaultStyles: {
+      width: '100%',
+      height: '1px',
+      'background-color': '#eff3f4',
+      margin: '16px 0',
+      'position': 'relative'
+    },
+    editableProperties: [
+      {
+        label: 'Title',
+        property: 'title',
+        type: 'text',
+        defaultValue: 'Latest posts'
+      },
+      {
+        label: 'Show Title',
+        property: 'showTitle',
+        type: 'checkbox',
+        defaultValue: true
+      },
+      {
+        label: 'Title Position',
+        property: 'titlePosition',
+        type: 'select',
+        options: ['left', 'center', 'right'],
+        defaultValue: 'left'
+      }
+    ]
+  },
+  SELECT: {
+    svg: dividers,
+    type: 'SELECT',
+    label: 'SELECT',
+    component: 'Select',
     defaultStyles: {
       width: '100%',
       height: '1px',
@@ -231,7 +257,7 @@ export const ELEMENT_TYPES = {
     svg: multisteps,
     type: 'MULTI_STEP_CONTAINER',
     label: 'Multi-Step Form',
-    component: MultiStepContainer,
+    component: 'MultiStepContainer',
     defaultStyles: {
       width: '100%',
       padding: '16px',
@@ -271,7 +297,7 @@ export const ELEMENT_TYPES = {
     svg: fileupload,
     type: 'FILE_UPLOAD',
     label: 'File Upload',
-    component: FileUpload,
+    component: 'FileUpload',
     defaultStyles: {
       width: '100%',
       padding: '20px',
@@ -317,7 +343,7 @@ export const ELEMENT_TYPES = {
     svg: datepicker,
     type: 'DATE_PICKER',
     label: 'Date Picker',
-    component: DatePicker,
+    component: 'DatePicker',
     defaultStyles: {
       width: '100%',
       'border-radius': '20px',
@@ -363,7 +389,7 @@ export const ELEMENT_TYPES = {
     svg: text,
     type: 'TEXT',
     label: 'Text',
-    component: TextComponent,
+    component: 'TextComponent',
     defaultStyles: {
       width: '100%',
       padding: '4px 0',

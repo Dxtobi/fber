@@ -6,7 +6,8 @@
   
   <input
     type="text"
-    placeholder={element?.attributes?.placeholder || "Enter Here" }
+    placeholder={element?.properties?.placeholder || "Enter Here" }
+    required={element?.properties?.required ||false}
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     class="outline-none select-none" 
   />
