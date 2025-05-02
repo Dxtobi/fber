@@ -3,20 +3,18 @@
   import { formStore } from '../../stores/formStore';
   import { selectedElementStore } from '../../stores/uiStore';
   import { ELEMENT_TYPES } from '$lib/elementTypes';
-
   import { onMount } from 'svelte';
-  import {HsvPicker} from 'svelte-color-picker';
-
+  import { HsvPicker } from 'svelte-color-picker';
 
   let selectedElement = null;
   let elementTypeConfig = null;
 
   function colorCallback(rgba) {
-	 
-    const colorObj = rgba.detail
-   const rgb =  `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
-    updateStyle('background-color', rgb)
+    const colorObj = rgba.detail;
+    const rgb = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+    updateStyle('background-color', rgb);
   }
+
   // Subscribe to the selected element store
   selectedElementStore.subscribe((value) => {
     selectedElement = value;
@@ -52,6 +50,7 @@
   function addArrayOption(property, defaultValue) {
     const newItem = typeof defaultValue === 'object' ? {...defaultValue} : defaultValue || '';
     updateProperty(property, [...selectedElement.properties[property], newItem]);
+    console.log(selectedElement.properties[property], newItem)
   }
 
   // Remove option from array property
@@ -69,420 +68,213 @@
   }
 </script>
 
-{#if selectedElement && elementTypeConfig}
-  <div class="property-editor w-[30%]">
-    <div class="editor-header">
-      <h3>{elementTypeConfig.label} Properties</h3>
-      <div class="element-type-badge">{selectedElement.type}</div>
-    </div>
-
-    <div class="section">
-      <h4 class="section-title">Content</h4>
-      {#each elementTypeConfig.editableProperties as prop}
-        <div class="property-group">
-          <label class="property-label">{prop.label}</label>
-          
-          {#if prop.type === 'text'}
-            <input
-              type="text"
-              class="property-input"
-              bind:value={selectedElement.properties[prop.property]}
-              on:input={(e) => updateProperty(prop.property, e.target.value)}
-            />
-          
-          {:else if prop.type === 'number'}
-            <input
-              type="number"
-              class="property-input"
-              bind:value={selectedElement.properties[prop.property]}
-              on:input={(e) => updateProperty(prop.property, Number(e.target.value))}
-            />
-          
-          {:else if prop.type === 'checkbox'}
-            <label class="checkbox-container">
-              <input
-                type="checkbox"
-                bind:checked={selectedElement.properties[prop.property]}
-                on:change={(e) => updateProperty(prop.property, e.target.checked)}
-              />
-              <span class="checkmark"></span>
-            </label>
-          
-          {:else if prop.type === 'select'}
-            <select
-              class="property-select"
-              bind:value={selectedElement.properties[prop.property]}
-              on:change={(e) => updateProperty(prop.property, e.target.value)}
-            >
-              {#each prop.options as option}
-                <option value={option}>{option}</option>
-              {/each}
-            </select>
-          
-          {:else if prop.type === 'array'}
-            <div class="array-property">
-              {#each selectedElement.properties[prop.property] as item, i}
-                <div class="array-item">
-                  {#if typeof item === 'object'}
-                    {#each Object.entries(item) as [key, value]}
-                      <div class="array-item-field">
-                        {#if typeof value === 'boolean'}
-                          <label class="checkbox-container">
-                            <input
-                              type="checkbox"
-                              checked={value}
-                              on:change={(e) => updateArrayItem(prop.property, i, key, e.target.checked)}
-                            />
-                            <span class="checkmark"></span>
-                            <span class="checkbox-label">{key}</span>
-                          </label>
-                        {:else}
-                          <input
-                            type="text"
-                            class="property-input"
-                            bind:value={item[key]}
-                            on:input={(e) => updateArrayItem(prop.property, i, key, e.target.value)}
-                            placeholder={key}
-                          />
-                        {/if}
-                      </div>
-                    {/each}
-                  {:else}
-                    <input
-                      type="text"
-                      class="property-input"
-                      bind:value={selectedElement.properties[prop.property][i]}
-                      on:input={(e) => {
-                        const newArray = [...selectedElement.properties[prop.property]];
-                        newArray[i] = e.target.value;
-                        updateProperty(prop.property, newArray);
-                      }}
-                    />
-                  {/if}
-                  <button 
-                    class="remove-item-button"
-                    on:click={() => removeArrayOption(prop.property, i)}
-                  >
-                    ×
-                  </button>
-                </div>
-              {/each}
-              <button 
-                class="add-item-button"
-                on:click={() => addArrayOption(prop.property, prop.defaultValue[0])}
-              >
-                + Add Option
-              </button>
-            </div>
-          {/if}
-        </div>
-      {/each}
-    </div>
-
-    <div class="section">
-      <h4 class="section-title">Appearance</h4>
-      <div class="property-group">
-        <label class="property-label">Width</label>
-        <select
-          class="property-select"
-          bind:value={selectedElement.styles.width}
-          on:change={(e) => updateStyle('width', e.target.value)}
-        >
-          <option value="100%">Full width</option>
-          <option value="auto">Auto</option>
-          <option value="50%">Half width</option>
-          <option value="300px">Fixed (300px)</option>
-        </select>
+<div class="w-[30%] h-full flex flex-col border-l border-gray-200 bg-white overflow-y-scroll">
+  {#if selectedElement && elementTypeConfig}
+    <div class="p-4 space-y-6">
+     
+      <div class="flex justify-between items-center pb-3 border-b border-gray-200">
+        <h3 class="text-base font-bold text-gray-900">{elementTypeConfig.label} Properties</h3>
+        <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+          {selectedElement.type}
+        </span>
       </div>
 
-      <div class="property-group">
-        <label class="property-label">Padding</label>
-        <input
-          type="text"
-          class="property-input"
-          bind:value={selectedElement.styles.padding}
-          on:input={(e) => updateStyle('padding', e.target.value)}
-        />
-      </div>
-
-      <div class="property-group">
-        <label class="property-label">Margin</label>
-        <input
-          type="text"
-          class="property-input"
-          bind:value={selectedElement.styles.margin}
-          on:input={(e) => updateStyle('margin', e.target.value)}
-        />
-      </div>
-
-      <div class="property-group">
-        <label class="property-label">Background Color</label>
-        <HsvPicker 
-          bind:color={selectedElement.styles['background-color']}
-          on:colorChange={colorCallback} startColor={selectedElement.styles['background-color']}
-          on:change={() => updateStyle('background-color', selectedElement.styles['background-color'])}
-        />
-      </div>
-
-      <div class="property-group">
-        <label class="property-label">Border</label>
-        <input
-          type="text"
-          class="property-input"
-          bind:value={selectedElement.styles.border}
-          on:input={(e) => updateStyle('border', e.target.value)}
-        />
-      </div>
-
-      <div class="property-group">
-        <label class="property-label">Border Radius</label>
-        <input
-          type="text"
-          class="property-input"
-          bind:value={selectedElement.styles['border-radius']}
-          on:input={(e) => updateStyle('border-radius', e.target.value)}
-        />
-      </div>
-    </div>
-  </div>
-{:else}
-  <div class="empty-state">
-    <svg viewBox="0 0 24 24" class="empty-icon">
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
-      <path d="M12 7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1s1-.45 1-1v-4c0-.55-.45-1-1-1z"/>
-    </svg>
-    <p>Select an element to edit its properties</p>
-  </div>
-{/if}
-
-<style>
-  .property-editor {
     
-    height: 100%;
-    background-color: #ffffff;
-    border-left: 1px solid #eff3f4;
-    padding: 16px;
-    overflow-y: auto;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  }
+      <div class="space-y-4">
+        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Content</h4>
+        {#each elementTypeConfig.editableProperties as prop}
+          <div class="space-y-1">
+            <label class="text-sm font-medium text-gray-900">{prop.label}</label>
+            
+            {#if prop.type === 'text'}
+              <input
+                type="text"
+                class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                bind:value={selectedElement.properties[prop.property]}
+                on:input={(e) => updateProperty(prop.property, e.target.value)}
+              />
+            
+            {:else if prop.type === 'number'}
+              <input
+                type="number"
+                class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                bind:value={selectedElement.properties[prop.property]}
+                on:input={(e) => updateProperty(prop.property, Number(e.target.value))}
+              />
+            
+            {:else if prop.type === 'checkbox'}
+              <label class="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="sr-only peer"
+                  bind:checked={selectedElement.properties[prop.property]}
+                  on:change={(e) => updateProperty(prop.property, e.target.checked)}
+                />
+                <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            
+            {:else if prop.type === 'select'}
+              <select
+                class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzUzNjQ3MSI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz48L3N2Zz4=')] bg-no-repeat bg-[right_0.5rem_center] bg-[length:1rem]"
+                bind:value={selectedElement.properties[prop.property]}
+                on:change={(e) => updateProperty(prop.property, e.target.value)}
+              >
+                {#each prop.options as option}
+                  <option value={option}>{option}</option>
+                {/each}
+              </select>
+            
+            {:else if prop.type === 'array'}
+              <div class="space-y-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                {#each selectedElement.properties[prop.property] as item, i}
+                  <div class="flex items-center gap-2">
+                    {#if typeof item === 'object'}
+                      <div class="flex-1 space-y-2">
+                        {#each Object.entries(item) as [key, value]}
+                          <div class="flex items-center gap-2">
+                            {#if typeof value === 'boolean'}
+                              <label class="inline-flex items-center cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  class="sr-only peer"
+                                  checked={value}
+                                  on:change={(e) => updateArrayItem(prop.property, i, key, e.target.checked)}
+                                />
+                                <div class="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600"></div>
+                                <span class="ml-2 text-sm text-gray-700">{key}</span>
+                              </label>
+                            {:else}
+                              <input
+                                type="text"
+                                class="flex-1 px-2 py-1 text-sm text-gray-900 bg-white rounded border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                bind:value={item[key]}
+                                on:input={(e) => updateArrayItem(prop.property, i, key, e.target.value)}
+                                placeholder={key}
+                              />
+                            {/if}
+                          </div>
+                        {/each}
+                      </div>
+                    {:else}
+                      <input
+                        type="text"
+                        class="flex-1 px-2 py-1 text-sm text-gray-900 bg-white rounded border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                        bind:value={selectedElement.properties[prop.property][i]}
+                        on:input={(e) => {
+                          const newArray = [...selectedElement.properties[prop.property]];
+                          newArray[i] = e.target.value;
+                          updateProperty(prop.property, newArray);
+                        }}
+                      />
+                    {/if}
+                      <button 
+                        class="p-1 text-red-500 hover:text-red-700"
+                        on:click={() => removeArrayOption(prop.property, i)}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                {/each}
+                <button 
+                  class="w-full py-1 px-2 text-sm text-blue-500 hover:text-blue-700 border border-dashed border-gray-300 rounded hover:bg-blue-50 flex items-center justify-center gap-1"
+                  on:click={() => addArrayOption(prop.property, prop.defaultValue[0]+1)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                  </svg>
+                  Add Option
+                </button>
+              </div>
+            {/if}
+          </div>
+        {/each}
+      </div>
 
-  .editor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #eff3f4;
-  }
+     
+      <div class="space-y-4">
+        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Appearance</h4>
+        
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Width</label>
+          <select
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzUzNjQ3MSI+PHBhdGggZD0iTTcgMTBsNSA1IDUtNXoiLz48L3N2Zz4=')] bg-no-repeat bg-[right_0.5rem_center] bg-[length:1rem]"
+            bind:value={selectedElement.styles.width}
+            on:change={(e) => updateStyle('width', e.target.value)}
+          >
+            <option value="100%">Full width</option>
+            <option value="auto">Auto</option>
+            <option value="50%">Half width</option>
+            <option value="300px">Fixed (300px)</option>
+          </select>
+        </div>
 
-  .editor-header h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: #0f1419;
-  }
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Padding</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            bind:value={selectedElement.styles.padding}
+            on:input={(e) => updateStyle('padding', e.target.value)}
+          />
+        </div>
 
-  .element-type-badge {
-    background-color: #eff3f4;
-    color: #536471;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 4px 8px;
-    border-radius: 20px;
-  }
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Margin</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            bind:value={selectedElement.styles.margin}
+            on:input={(e) => updateStyle('margin', e.target.value)}
+          />
+        </div>
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Text Color</label>
+          <HsvPicker 
+            on:colorChange={(rgba)=>{
+                const colorObj = rgba.detail;
+                const rgb = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${colorObj.a})`;
+                updateStyle('color', rgb);
+            }} 
+            startColor={selectedElement.styles['color']}
+          />
+        </div>
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Background Color</label>
+          <HsvPicker 
+            on:colorChange={colorCallback} 
+            startColor={selectedElement.styles['background-color']}
+          />
+        </div>
 
-  .section {
-    margin-bottom: 20px;
-  }
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Border</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            bind:value={selectedElement.styles.border}
+            on:input={(e) => updateStyle('border', e.target.value)}
+          />
+        </div>
 
-  .section-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #536471;
-    margin: 0 0 12px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .property-group {
-    margin-bottom: 16px;
-  }
-
-  .property-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #0f1419;
-    margin-bottom: 6px;
-  }
-
-  .property-input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #eff3f4;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #0f1419;
-    background-color: #f7f9f9;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-  }
-
-  .property-input:focus {
-    outline: none;
-    border-color: #1d9bf0;
-    background-color: #ffffff;
-  }
-
-  .property-select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #eff3f4;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #0f1419;
-    background-color: #f7f9f9;
-    box-sizing: border-box;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23536471'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px;
-  }
-
-  .property-select:focus {
-    outline: none;
-    border-color: #1d9bf0;
-    background-color: #ffffff;
-  }
-
-  .checkbox-container {
-    display: flex;
-    align-items: center;
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  .checkmark {
-    height: 18px;
-    width: 18px;
-    background-color: #f7f9f9;
-    border: 1px solid #eff3f4;
-    border-radius: 4px;
-    margin-right: 8px;
-    transition: background-color 0.2s ease;
-  }
-
-  .checkbox-container:hover input ~ .checkmark {
-    background-color: #e8f5fd;
-  }
-
-  .checkbox-container input:checked ~ .checkmark {
-    background-color: #1d9bf0;
-    border-color: #1d9bf0;
-  }
-
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  .checkbox-container input:checked ~ .checkmark:after {
-    display: block;
-  }
-
-  .checkbox-container .checkmark:after {
-    left: 6px;
-    top: 2px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-
-  .checkbox-label {
-    font-size: 14px;
-    color: #0f1419;
-  }
-
-  .array-property {
-    border: 1px solid #eff3f4;
-    border-radius: 8px;
-    padding: 8px;
-    background-color: #f7f9f9;
-  }
-
-  .array-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .array-item-field {
-    flex-grow: 1;
-    margin-right: 8px;
-  }
-
-  .remove-item-button {
-    background: none;
-    border: none;
-    color: #f4212e;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 4px;
-    line-height: 1;
-  }
-
-  .add-item-button {
-    width: 100%;
-    background: none;
-    border: 1px dashed #cfd9de;
-    border-radius: 4px;
-    padding: 8px;
-    color: #1d9bf0;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .add-item-button:hover {
-    background-color: #e8f5fd;
-  }
-
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 40px 20px;
-    text-align: center;
-    color: #536471;
-  }
-
-  .empty-icon {
-    width: 48px;
-    height: 48px;
-    fill: #cfd9de;
-    margin-bottom: 16px;
-  }
-
-  .empty-state p {
-    margin: 0;
-    font-size: 14px;
-  }
-</style>
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Border Radius</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            bind:value={selectedElement.styles['border-radius']}
+            on:input={(e) => updateStyle('border-radius', e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
+  {:else}
+    <div class="flex flex-col items-center justify-center h-full p-10 text-center text-gray-500">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="text-sm">Select an element to edit its properties</p>
+    </div>
+  {/if}
+</div>

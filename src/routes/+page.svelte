@@ -45,7 +45,7 @@
   </script>
   
   <div class="flex flex-col h-screen">
-    <header class="bg-gray-800 text-white p-4">
+    <header class="  p-4">
       <div class="container mx-auto flex justify-between items-center">
         <h1 class="text-2xl font-bold">Form Builder</h1>
         <div class="space-x-2">

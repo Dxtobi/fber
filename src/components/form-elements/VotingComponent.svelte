@@ -19,17 +19,7 @@
       };
     }
   
-    function addOption() {
-      options = [...options, `Option ${options.length + 1}`];
-    }
-  
-    function removeOption(index) {
-      options = options.filter((_, i) => i !== index);
-    }
-  
-    function updateOption(index, value) {
-      options = options.map((opt, i) => i === index ? value : opt);
-    }
+    
   </script>
   
   <div 
@@ -53,6 +43,7 @@
             type="text"
             class="flex-1 p-1 border-none rounded"
             value={option}
+            disabled
             on:input={(e) => updateOption(index, e.target.value)}
           />
          

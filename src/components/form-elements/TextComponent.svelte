@@ -55,15 +55,18 @@
   // Combine all styles with proper precedence
   $: computedStyles = {
     ...element.defaultStyles, // Base styles from element type
-    ...textTypeStyles[element.properties.textType || 'paragraph'], // Text type styles
+    ...element.styles, // User custom styles (highest precedence)
     color: textColors[element.properties.textColor || 'default'], // Color override
-    ...element.styles // User custom styles (highest precedence)
+    ...textTypeStyles[element.properties.textType || 'paragraph'], // Text type styles
   };
 
   // Convert styles object to CSS string
   $: styleString = Object.entries(computedStyles)
     .map(([k, v]) => `${k}: ${v}`)
     .join('; ');
+
+
+    
 </script>
 
 {#if element.properties.textType === 'heading'}

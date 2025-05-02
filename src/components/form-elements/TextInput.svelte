@@ -1,8 +1,9 @@
 
   <script>
     export let element;
-    console.log(element)
+    
   </script>
+  
   
   <input
     type="text"

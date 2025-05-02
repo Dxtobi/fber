@@ -18,6 +18,7 @@
       placeholder={element?.attributes?.placeholder || "Select date"}
       on:change={handleDateChange}
       class="date-picker-input"
+      
     />
     <span class="calendar-icon">
       <!-- Calendar SVG Icon -->
@@ -46,8 +47,9 @@
       width: 100%;
       padding: 8px 30px 8px 8px; /* Space for the calendar icon */
       font-size: 14px;
-      border: 1px solid #ccc;
+      border: none;
       border-radius: 4px;
+      background-color: transparent;
       outline: none;
       transition: border-color 0.2s ease-in-out;
       box-sizing: border-box;
@@ -55,8 +57,8 @@
   
     /* Focus state for the input */
     .date-picker-input:focus {
-      border-color: #4CAF50;
-      box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+      border-color: #4caf4f00;
+      box-shadow: 0 0 5px rgba(76, 175, 79, 0);
     }
   
     /* Calendar icon styling */

@@ -7,10 +7,8 @@
   import { formStore } from '../../stores/formStore';
   import { selectedElementStore } from '../../stores/uiStore';
   import * as FormElements from "../form-elements/index";
-  onMount(()=>{
-    console.log(FormElements)
-  })
-  
+  import {dndzone} from "svelte-dnd-action";
+  const flipDurationMs = 300;
   let elements = [];
   let draggedElement = null;
 
@@ -24,7 +22,7 @@
     event.preventDefault();
     const type = event.dataTransfer.getData('text/plain');
     const elementType = ELEMENT_TYPES[type];
-    console.log(FormElements[elementType.component], $formStore, elementType, type) 
+   
     
     if (elementType) {
       const newElement = {
@@ -47,17 +45,30 @@
   function selectElement(element) {
     selectedElementStore.set(element);
   }
+
+  function handleDndConsider(e) {
+        let items = e.detail.items;
+        formStore.update((currentElements) => [...items]);
+        console.log(e.detail)
+    }
+  function handleDndFinalize(e) {
+    let items = e.detail.items;
+    formStore.update((currentElements) => [...items]);
+    console.log(e.detail)
+
+    }
 </script>
 
 <div
  tabindex="0"
  role="button"
-  class="canvas w-[100%] flex flex-col"
+  class="canvas w-[100%] flex flex-col overflow-scroll"
   on:dragover={(e) => e.preventDefault()}
   on:drop={handleDrop}
+  use:dndzone="{{items:elements, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"
 >
   {#each elements as element (element.id)}
-  {console.log(element)}
+ 
     <a
       href={'#'}
       class="form-element"
