@@ -1,4 +1,3 @@
-<!-- src/components/canvas/Canvas.svelte -->
 <script>
 // @ts-nocheck
 
@@ -37,13 +36,14 @@
       };
 
       formStore.update((currentElements) => [...currentElements, newElement]);
-    
+      selectedElementStore.set(newElement)
     }
   }
 
   // Handle selecting an element
   function selectElement(element) {
     selectedElementStore.set(element);
+    // console.log('selected:', element)
   }
 
   function handleDndConsider(e) {
@@ -59,28 +59,30 @@
     }
 </script>
 
-<div
- tabindex="0"
- role="button"
-  class="canvas w-[100%] flex flex-col overflow-scroll"
-  on:dragover={(e) => e.preventDefault()}
-  on:drop={handleDrop}
-  use:dndzone="{{items:elements, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"
->
-  {#each elements as element (element.id)}
- 
-    <a
-      href={'#'}
-      class="form-element"
-     
-      on:click={() => selectElement(element)}
-      role='button'
-      tabindex='0'
+<section class="w-full  min-h-[100vh]">
+  <div
+    tabindex="0"
+    role="button"
+      class="canvas w-[50%] flex flex-col overflow-scroll m-auto h-full"
+      on:dragover={(e) => e.preventDefault()}
+      on:drop={handleDrop}
+      use:dndzone="{{items:elements, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"
     >
-      <svelte:component this={FormElements[element.component]} element={element} />
-    </a>
-  {/each}
-</div>
+      {#each elements as element (element.id)}
+    
+        <a
+          href={'#'}
+          class="form-element"
+        
+          on:click={() => selectElement(element)}
+          role='button'
+          tabindex='0'
+        >
+          <svelte:component this={FormElements[element.component]} element={element} />
+        </a>
+      {/each}
+    </div>
+</section>
 
 <style>
   .canvas {
@@ -90,7 +92,7 @@
     background-color: #f9f9f9;
   }
   .form-element {
-    margin-bottom: 8px;
+    margin-bottom: 0px;
     cursor: pointer;
   }
 </style>

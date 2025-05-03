@@ -18,6 +18,7 @@
   // Subscribe to the selected element store
   selectedElementStore.subscribe((value) => {
     selectedElement = value;
+    console.log('------updated-----------\n', value, '\n------updated-----------',)
     if (value) {
       elementTypeConfig = ELEMENT_TYPES[value.type];
     }
@@ -29,6 +30,8 @@
       const updatedElements = elements.map((el) =>
         el.id === selectedElement.id ? { ...el, properties: { ...el.properties, [property]: value } } : el
       );
+      console.log(updatedElements)
+      // selectedElementStore.set(updatedElements)
       return updatedElements;
     });
   }
@@ -42,28 +45,65 @@
           styles: { ...el.styles, [property]: value } 
         } : el
       );
+
+      
+      // selectedElementStore.set(updatedElements)
       return updatedElements;
+
     });
   }
 
   // Add new option to array property
   function addArrayOption(property, defaultValue) {
-    const newItem = typeof defaultValue === 'object' ? {...defaultValue} : defaultValue || '';
-    updateProperty(property, [...selectedElement.properties[property], newItem]);
-    console.log(selectedElement.properties[property], newItem)
+    formStore.update((elements) => {
+      const elementToUpdate = elements.find((el) => el.id === selectedElement.id);
+      const currentArray = elementToUpdate.properties[property];
+
+      // Determine the type of the array (plain array or array of objects)
+      const isArrayObject = Array.isArray(currentArray) && typeof currentArray[0] === 'object';
+
+      // Create a new item based on the type
+      const newItem = isArrayObject
+        ? { ...defaultValue } // For arrays of objects, use the default object structure
+        : 'New Option' + currentArray.length; // For plain arrays, use a default string
+
+      // Add the new item to the array
+      const newArray = [...currentArray, newItem];
+      elementToUpdate.properties[property] = newArray;
+
+      return [...elements];
+    });
   }
 
   // Remove option from array property
   function removeArrayOption(property, index) {
-    const newArray = [...selectedElement.properties[property]];
-    newArray.splice(index, 1);
-    updateProperty(property, newArray);
+    formStore.update((elements) => {
+      const elementToUpdate = elements.find((el) => el.id === selectedElement.id);
+      const currentArray = elementToUpdate.properties[property];
+
+      // Remove the item at the specified index
+      const newArray = [...currentArray];
+      newArray.splice(index, 1);
+      elementToUpdate.properties[property] = newArray;
+
+      return [...elements];
+    });
   }
 
   // Update array item property
   function updateArrayItem(property, index, key, value) {
-    const newArray = [...selectedElement.properties[property]];
-    newArray[index] = { ...newArray[index], [key]: value };
+    const formElement_ = $formStore.find((el) => el.id === selectedElement.id)
+    const currentArray = formElement_.properties[property];
+    const newArray = [...currentArray];
+    
+
+    // Handle both plain arrays and arrays of objects
+    if (typeof newArray[index] === 'object') {
+      newArray[index] = { ...newArray[index], [key]: value }; // Update object property
+    } else {
+      newArray[index] = value; // Update plain array value
+    }
+
     updateProperty(property, newArray);
   }
 </script>
@@ -83,6 +123,7 @@
       <div class="space-y-4">
         <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Content</h4>
         {#each elementTypeConfig.editableProperties as prop}
+        {@const formElement_ = $formStore.find((el) => el.id === selectedElement.id)}
           <div class="space-y-1">
             <label class="text-sm font-medium text-gray-900">{prop.label}</label>
             
@@ -126,7 +167,8 @@
             
             {:else if prop.type === 'array'}
               <div class="space-y-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                {#each selectedElement.properties[prop.property] as item, i}
+                
+                {#each formElement_.properties[prop.property] as item, i}
                   <div class="flex items-center gap-2">
                     {#if typeof item === 'object'}
                       <div class="flex-1 space-y-2">
@@ -159,9 +201,9 @@
                       <input
                         type="text"
                         class="flex-1 px-2 py-1 text-sm text-gray-900 bg-white rounded border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                        bind:value={selectedElement.properties[prop.property][i]}
+                        bind:value={formElement_.properties[prop.property][i]}
                         on:input={(e) => {
-                          const newArray = [...selectedElement.properties[prop.property]];
+                          const newArray = [...formElement_.properties[prop.property]];
                           newArray[i] = e.target.value;
                           updateProperty(prop.property, newArray);
                         }}
@@ -179,7 +221,10 @@
                 {/each}
                 <button 
                   class="w-full py-1 px-2 text-sm text-blue-500 hover:text-blue-700 border border-dashed border-gray-300 rounded hover:bg-blue-50 flex items-center justify-center gap-1"
-                  on:click={() => addArrayOption(prop.property, prop.defaultValue[0]+1)}
+                  on:click={() => {
+                    console.log(prop, )
+                    addArrayOption(prop.property, formElement_.properties.options[formElement_.properties.options.length-1]                                                                                                                         )
+                  }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />

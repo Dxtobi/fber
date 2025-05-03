@@ -21,11 +21,11 @@ export const ELEMENT_TYPES = {
       width: '100%',
       padding: '12px 16px',
       'border-radius': '20px',
-      border: '1px solid #eff3f4',
+      border: '1px solid gray',
       margin: '8px 0',
       'font-size': '15px',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      'background-color': '#f7f9f9',
+      'background-color': '#ffffff',
       'transition': 'border-color 0.2s ease, background-color 0.2s ease',
       'color': '#0f1419',
       'box-shadow': 'none',
@@ -121,7 +121,8 @@ export const ELEMENT_TYPES = {
       'border': '1px solid #eff3f4',
       'margin': '12px 0',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-      'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.05)'
+      'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.05)',
+      color:'#000000'
     },
     editableProperties: [
       {
@@ -156,6 +157,7 @@ export const ELEMENT_TYPES = {
       'background-color': '#fff',
       'border-radius': '16px',
       'border': '1px solid #eff3f4',
+      color:'#000',
       'margin': '12px 0',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.05)'

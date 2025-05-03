@@ -1,24 +1,20 @@
 <script>
 // @ts-nocheck
 
-	import { ELEMENT_TYPES } from "$lib/elementTypes";
+
+  import { formStore } from '../../stores/formStore';
 
     export let element;
     
-    // Initialize with default values from elementTypes if not set
-    $: question = element.attributes?.question ?? ELEMENT_TYPES.VOTING.editableProperties.find(p => p.property === 'question').defaultValue;
-    $: options = element.attributes?.options ?? ELEMENT_TYPES.VOTING.editableProperties.find(p => p.property === 'options').defaultValue;
+   
+   
+   
     $: selectedOption = null;
   
-    // Update element attributes when local values change
-    $: if (element.attributes?.question !== question || element.attributes?.options !== options) {
-      element.attributes = {
-        ...element.attributes,
-        question,
-        options
-      };
-    }
   
+
+    $:console.log(element,$formStore )
+    
     
   </script>
   
@@ -26,10 +22,10 @@
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     class="voting-component"
   >
-    <h3 class="text-lg font-semibold mb-3 rounded bg-gray-100 border-none p-3">{question}</h3>
+    <h3 class="text-lg font-semibold mb-3 rounded bg-gray-100 border-none p-3">{element?.properties?.question}</h3>
     
     <div class="space-y-2 mb-3">
-      {#each options as option, index (index)}
+      {#each element?.properties?.options||[] as option, index (index)}
         <div class="flex items-center w-full">
           <input
             type="radio"
