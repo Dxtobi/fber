@@ -1,10 +1,12 @@
 <script>
 
-    import { formStore } from '$lib/stores/formStore';
+  import { formStore } from '$lib/stores/formStore';
 	import Canvas from '../components/canvas/Canvas.svelte';
+	import Header from '../components/canvas/Header.svelte';
 
 	import Sidebar from '../components/canvas/Sidebar.svelte';
 	import PropertyEditor from '../components/editor/PropertyEditor.svelte';
+	import DeviceEmulator from '../components/preview/DeviceEmulator.svelte';
 
     
     async function saveForm() {
@@ -42,32 +44,32 @@
       alert('Failed to publish form');
     }
   }
-  </script>
+  let showPreview = false
+  let defaultDevice = "mobile"
   
-  <div class="flex flex-col h-screen">
-    <header class="  p-4">
-      <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Form Builder</h1>
-        <div class="space-x-2">
-          <button
-            on:click={saveForm}
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Save
-          </button>
-          <button
-            on:click={publishForm}
-            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-          >
-            Publish
-          </button>
-        </div>
-      </div>
-    </header>
+
+	/**
+	 * @param {{ detail: { device: string; }; }} e
+	 */
+	function callPreviewDeviceUpdate(e) {
+		defaultDevice = e.detail.device
+    console.log("FROM PAGE: ", defaultDevice)
+	}
+</script>
+  
+  <div class="flex flex-col h-screen ">
+    
+    <Header showPreview={showPreview} on:triggerAction={(bool) => showPreview = bool.detail.action} on:setDeviceType={callPreviewDeviceUpdate} />
+    {#if showPreview}
+      <DeviceEmulator {defaultDevice}/>
+    {:else}
+
     
     <main class="flex flex-1 overflow-hidden">
+      
       <Sidebar />
       <Canvas />
       <PropertyEditor />
     </main>
+    {/if}
   </div>

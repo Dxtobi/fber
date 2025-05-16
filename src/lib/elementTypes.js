@@ -12,6 +12,104 @@ import qa from '$lib/svgs/qa.svelte';
 
 
 export const ELEMENT_TYPES = {
+ 
+  
+  
+  NUMBER: {
+    svg: textinput,
+    type: 'NUMBER',
+    label: 'Number',
+    component: 'NumberInput',
+    defaultStyles: {
+      width: '100%',
+      
+      'border-radius': '20px',
+      border: '1px solid #1d9bf0',
+      margin: '8px 0',
+      'font-size': '15px',
+      'font-family':
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      'background-color': '#ffffff',
+      transition: 'border-color 0.2s ease, background-color 0.2s ease',
+      color: '#0f1419',
+      'box-shadow': 'none',
+      'box-sizing': 'border-box',
+      'focus-border-color': '#1d9bf0',
+      'focus-background-color': '#ffffff',
+      'focus-outline': 'none',
+    },
+    editableProperties: [
+      {
+        label: 'Placeholder',
+        property: 'placeholder',
+        type: 'text',
+        defaultValue: 'Enter Phone No:',
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
+      },
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Phone',
+      },
+      
+    ],
+  },
+ 
+  DATETIME_PICKER: {
+    svg: datepicker,
+    type: 'DATETIME_PICKER',
+    label: 'Date & Time',
+    component: 'DateTimePicker',
+    defaultStyles: {
+      width: '100%',
+      'border-radius': '20px',
+      border: '1px solid #1d9bf0',
+      padding: '12px 16px',
+      'background-color': '#f7f9f9',
+      'font-family':
+        '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      'font-size': '15px',
+      color: '#0f1419',
+      transition: 'border-color 0.2s ease, background-color 0.2s ease',
+      'focus-border-color': '#1d9bf0',
+      'focus-background-color': '#ffffff',
+      margin: '8px 0',
+    },
+    editableProperties: [
+      {
+        label: 'Placeholder',
+        property: 'placeholder',
+        type: 'text',
+        defaultValue: 'Select date and time',
+      },
+      {
+        label: 'Date Format',
+        property: 'format',
+        type: 'text',
+        defaultValue: 'MMM D, YYYY h:mm A',
+      },
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Date & Time',
+      },
+      {
+        label: 'Show Calendar Icon',
+        property: 'showIcon',
+        type: 'checkbox',
+        defaultValue: true,
+      },
+    ],
+  },
+
+
   TEXT_INPUT: {
     svg: textinput,
     type: 'TEXT_INPUT',
@@ -21,20 +119,36 @@ export const ELEMENT_TYPES = {
       width: '100%',
       padding: '12px 16px',
       'border-radius': '20px',
-      border: '1px solid gray',
+     
       margin: '8px 0',
       'font-size': '15px',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'background-color': '#ffffff',
       'transition': 'border-color 0.2s ease, background-color 0.2s ease',
       'color': '#0f1419',
+      border: '1px solid #1d9bf0',
       'box-shadow': 'none',
       'box-sizing': 'border-box',
       'focus-border-color': '#1d9bf0',
       'focus-background-color': '#ffffff',
-      'focus-outline': 'none'
+     
     },
     editableProperties: [
+      {
+        label: 'Input Type',
+        property: 'type',
+        type: 'select',
+        options: [
+          'text',
+          'password',
+          'email', 
+          'number',
+          
+          'url',
+          'search'
+        ],
+        defaultValue: 'text'
+      },
       {
         label: 'Placeholder',
         property: 'placeholder',
@@ -119,6 +233,7 @@ export const ELEMENT_TYPES = {
       'background-color': '#fff',
       'border-radius': '16px',
       'border': '1px solid #eff3f4',
+      'focus-border-color': '#1d9bf0',
       'margin': '12px 0',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.05)',
@@ -157,6 +272,8 @@ export const ELEMENT_TYPES = {
       'background-color': '#fff',
       'border-radius': '16px',
       'border': '1px solid #eff3f4',
+      'focus-border-color': '#1d9bf0',
+
       color:'#000',
       'margin': '12px 0',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
@@ -228,12 +345,23 @@ export const ELEMENT_TYPES = {
     component: 'Select',
     defaultStyles: {
       width: '100%',
-      height: '1px',
+      'border-radius':'20px',
       'background-color': '#eff3f4',
       margin: '16px 0',
-      'position': 'relative'
+      'position': 'relative',
+      padding:'12px 16px',
     },
     editableProperties: [
+      {
+        label: 'Options',
+        property: 'options',
+        type: 'array',
+        defaultValue: [
+         'Option A',
+         'Option B',
+         'Option C'
+        ]
+      },
       {
         label: 'Title',
         property: 'title',
@@ -349,8 +477,8 @@ export const ELEMENT_TYPES = {
     defaultStyles: {
       width: '100%',
       'border-radius': '20px',
-      border: '1px solid #eff3f4',
-      'padding': '12px 16px',
+      border: '1px solid #1d9bf0',
+      'padding': '3px 0px',
       'background-color': '#f7f9f9',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'font-size': '15px',
@@ -425,5 +553,129 @@ export const ELEMENT_TYPES = {
         defaultValue: 'default'
       }
     ]
-  }
+  },
+  SLIDER: {
+    svg: multisteps,
+    type: 'SLIDER',
+    label: 'Slider',
+    component: 'Slider',
+    defaultStyles: {
+      width: '100%',
+      padding: '8px 0',
+      'background-color': '#f7f9f9',
+      'border-radius': '8px',
+      margin: '8px 0',
+      'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      color: '#0f1419',
+      'box-shadow': 'none',
+    },
+    editableProperties: [
+      {
+        label: 'Min Value',
+        property: 'min',
+        type: 'number',
+        defaultValue: 0,
+      },
+      {
+        label: 'Max Value',
+        property: 'max',
+        type: 'number',
+        defaultValue: 100,
+      },
+      {
+        label: 'Step',
+        property: 'step',
+        type: 'number',
+        defaultValue: 1,
+      },
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Slider',
+      },
+      {
+        label: 'Show Value',
+        property: 'showValue',
+        type: 'checkbox',
+        defaultValue: true,
+      },
+    ],
+  },
+
+  CHECKBOX: {
+    svg: multisteps,
+    type: 'CHECKBOX',
+    label: 'Checkbox',
+    component: 'Checkbox',
+    defaultStyles: {
+      width: 'auto',
+      padding: '8px 0',
+      'font-size': '15px',
+      'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      color: '#0f1419',
+      margin: '4px 0',
+    },
+    editableProperties: [
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Checkbox Label',
+      },
+      {
+        label: 'Checked',
+        property: 'checked',
+        type: 'checkbox',
+        defaultValue: false,
+      },
+      {
+        label: 'Disabled',
+        property: 'disabled',
+        type: 'checkbox',
+        defaultValue: false,
+      },
+    ],
+  },
+
+  YES_NO: {
+    svg: multisteps,
+    type: 'YES_NO',
+    label: 'Yes/No',
+    component: 'YesNo',
+    defaultStyles: {
+      width: '100%',
+      padding: '12px 16px',
+      'border-radius': '20px',
+      border: '1px solid #eff3f4',
+      'background-color': '#f7f9f9',
+      'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      'font-size': '15px',
+      color: '#0f1419',
+      margin: '8px 0',
+      'box-shadow': 'none',
+    },
+    editableProperties: [
+      {
+        label: 'Question',
+        property: 'question',
+        type: 'text',
+        defaultValue: 'Do you agree?',
+      },
+      {
+        label: 'Default Answer',
+        property: 'defaultValue',
+        type: 'select',
+        options: ['Yes', 'No'],
+        defaultValue: 'Yes',
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
+      },
+    ],
+  },
+
 };

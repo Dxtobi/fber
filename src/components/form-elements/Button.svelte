@@ -1,4 +1,6 @@
 <script>
+	import { onMount } from "svelte";
+
     export let element;
   
     // Handle variant styles
@@ -37,6 +39,12 @@
     $: styleString = Object.entries(computedStyles)
       .map(([k, v]) => `${k}: ${v}`)
       .join('; ');
+
+
+      export let from
+      onMount(()=>{
+        console.log(from)
+      })
   </script>
   
   <button

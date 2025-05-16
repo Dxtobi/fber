@@ -10,7 +10,7 @@
       selectedDate = event.target.value;
     }
   </script>
-  
+  <span class="block text-sm font-medium text-gray-500 mb-1 ml-1">{element.properties.label}</span>
   <div class="date-picker-container" style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}>
     <input
       type="date"

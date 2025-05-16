@@ -59,11 +59,11 @@
     }
 </script>
 
-<section class="w-full  min-h-[100vh]">
+
   <div
     tabindex="0"
     role="button"
-      class="canvas w-[50%] flex flex-col overflow-scroll m-auto h-full"
+      class="canvas w-[100%] flex flex-col overflow-scroll m-auto h-full py-44"
       on:dragover={(e) => e.preventDefault()}
       on:drop={handleDrop}
       use:dndzone="{{items:elements, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"
@@ -73,7 +73,6 @@
         <a
           href={'#'}
           class="form-element"
-        
           on:click={() => selectElement(element)}
           role='button'
           tabindex='0'
@@ -82,14 +81,14 @@
         </a>
       {/each}
     </div>
-</section>
+
 
 <style>
   .canvas {
     
     border: 1px solid #ccc;
     padding: 16px;
-    background-color: #f9f9f9;
+   
   }
   .form-element {
     margin-bottom: 0px;

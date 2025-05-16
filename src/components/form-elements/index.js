@@ -8,3 +8,5 @@ export { default as FileUpload } from './FileUpload.svelte';
 export { default as DatePicker } from './DatePicker.svelte';
 export { default as TextComponent } from './TextComponent.svelte';
 export { default as Select } from './Select.svelte'
+export { default as Checkbox } from './Checkbox.svelte'
+export { default as NumberInput } from './NumberInput.svelte'
