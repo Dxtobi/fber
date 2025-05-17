@@ -1,7 +1,12 @@
 
   <script>
-    export let element;
-    
+	import { updateFormStoreValue } from "../../stores/formStore";
+
+    let {element}=$props();
+    // @ts-ignore
+    const handleOnchange=(e)=>{
+      updateFormStoreValue(element.id, 'value', e?.target?.value||'')
+    }
   </script>
   
   
@@ -13,4 +18,7 @@
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     class="outline-none select-none" 
     type={element?.properties?.type}
+    value={element?.properties.value}
+    onchange={handleOnchange}
+    
   />

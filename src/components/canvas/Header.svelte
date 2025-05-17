@@ -22,7 +22,7 @@
     // @ts-ignore
     const setActiveTab = (tab) => {
       activeTab = tab;
-      console.log(tab)
+      
       // If preview is selected, you might want to trigger a preview generation
       if (tab === 'preview') {
         dispatch('triggerAction', { action: true });

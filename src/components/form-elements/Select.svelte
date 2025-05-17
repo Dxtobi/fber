@@ -1,19 +1,28 @@
 <script>
-  export let element;
+  import { updateFormStoreValue } from "../../stores/formStore";
+  
+  let {element} = $props();
 
- 
-  let selected = element.properties.options[0]
+  let selected = $derived(element.properties.value)
+  // @ts-ignore
+  const handleOnSelected=(e)=>{
+    updateFormStoreValue(element.id, "value", e.target.value)
+  }
+
+  // $effect(()=>{
+  //   $inspect(selected)
+  // })
 </script>
 
 <div>
   <div class={`${element.properties.titlePosition === 'left' ? 'text-left' :element.properties.titlePosition === 'right'?'text-right':'text-center'}`}>
     {#if element.properties.showTitle}
-      <span style="font-weight: 500;">{element.properties.title}</span>
+      <span class="block text-sm font-medium text-gray-500 ">{element.properties.title}</span>
     {/if}
     
    
   </div>
-  <select style={ Object.entries(element.styles).map(([k, v]) => `${k}: ${v}`).join('; ')} value={selected}>
+  <select onchange={handleOnSelected} style={ Object.entries(element.styles).map(([k, v]) => `${k}: ${v}`).join('; ')} value={selected}>
     {#each element.properties.options as option (option)}
       <option value={option}>{option}</option>
     {/each}

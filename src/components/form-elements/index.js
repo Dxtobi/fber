@@ -10,3 +10,7 @@ export { default as TextComponent } from './TextComponent.svelte';
 export { default as Select } from './Select.svelte'
 export { default as Checkbox } from './Checkbox.svelte'
 export { default as NumberInput } from './NumberInput.svelte'
+export { default as YesNo } from './YesNo.svelte'
+export { default as TextareaInput } from './TextareaInput.svelte'
+
+

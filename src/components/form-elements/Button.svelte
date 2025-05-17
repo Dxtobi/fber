@@ -42,9 +42,7 @@
 
 
       export let from
-      onMount(()=>{
-        console.log(from)
-      })
+     
   </script>
   
   <button

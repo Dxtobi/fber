@@ -2,16 +2,19 @@
     // @ts-nocheck
     import { CANDC } from "$lib/utils/countryCodes";
     import { onMount } from 'svelte';
+    import { updateFormStoreValue } from "../../stores/formStore";
     
     const countryCodes = CANDC;
-    let selectedCountry = countryCodes.find((c) => c.code === 'NG'); // Default to US
-    let phoneNumber = '';
-    let dropdownOpen = false;
-    let searchQuery = '';
-    let filteredCountries = countryCodes;
-    let inputElement;
-    let dropdownElement;
-    export let element
+    let selectedCountry = $state(countryCodes.find((c) => c.code === 'NG')); // Default to US
+    let phoneNumber = $state('');
+    let dropdownOpen = $state(false);
+    let searchQuery = $state('');
+    let filteredCountries = $state(countryCodes);
+    let inputElement = $state();
+    let dropdownElement=$state();
+    let {element}=$props();
+    // @ts-ignore
+   
     onMount(() => {
       // Close dropdown when clicking outside
       document.addEventListener('click', (event) => {
@@ -33,7 +36,8 @@
       }
     };
     
-    const toggleDropdown = () => {
+    const toggleDropdown = (e) => {
+      e.stopPropagation()
       dropdownOpen = !dropdownOpen;
       
       // If opening the dropdown, reset the search
@@ -65,6 +69,7 @@
       // Allow only numbers
       const numericValue = e.target.value.replace(/\D/g, '');
       phoneNumber = numericValue;
+      updateFormStoreValue(element.id, 'value', phoneNumber)
     };
     </script>
     
@@ -77,7 +82,7 @@
         <button 
           type="button"
           class="flex items-baseline-last     px-3 py-2 text-gray-700 hover:bg-gray-100 focus:outline-none"
-          on:click|stopPropagation={toggleDropdown}
+          onclick={toggleDropdown}
         >
           <span class="mr-1 text-lg ">{getFlagEmoji(selectedCountry.code)}</span>
           <span class="mr-1 text-sm font-medium">{selectedCountry.dial_code}</span>
@@ -93,8 +98,8 @@
           type="tel"
           placeholder={element.properties.placeholder}
           required={element.properties.required}
-          bind:value={phoneNumber}
-          on:input={formatPhoneNumber}
+          value={element.properties.value}
+          oninput={formatPhoneNumber}
           class="flex-1 px-4 py-2 bg-transparent border-none focus:outline-none text-gray-800 placeholder-gray-400"
         />
       </div>
@@ -112,7 +117,7 @@
                 type="text"
                 placeholder="Search countries..."
                 bind:value={searchQuery}
-                on:input={handleSearchInput}
+                oninput={handleSearchInput}
                 class="w-full pl-8 pr-4 py-2 bg-gray-50 rounded-full border-none focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
                 autofocus
               />
@@ -130,7 +135,7 @@
                   type="button"
                   class="flex items-center w-full px-4 py-2 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none text-left"
                   class:bg-blue-50={selectedCountry.code === country.code}
-                  on:click={() => handleCountrySelect(country)}
+                  onclick={() => handleCountrySelect(country)}
                 >
                   <span class="text-lg mr-3">{getFlagEmoji(country.code)}</span>
                   <span class="text-sm">{country.name}</span>

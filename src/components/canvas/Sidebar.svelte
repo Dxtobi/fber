@@ -13,17 +13,17 @@
   const categories = {
     'Layout Elements': [
       { id: 'SECTION_DIVIDER', label: 'Sections' },
-      { id: 'MULTI_STEP_CONTAINER', label: 'Tables' },
+      
     ],
     'Text Input Elements': [
-      { id: 'TEXT', label: 'Text' },
-      { id: 'TEXT_MULTIPLE', label: 'Multiple' },
-      { id: 'NUMBER', label: 'Number' },
+      
+      { id: 'TEXT_INPUT', label: 'Text Input' },
+      { id: 'TEXTAREA_INPUT', label: 'Textarea Input' },
+      { id: 'NUMBER', label: 'Phone' },
     ],
     'Text Elements': [
-      { id: 'TEXT_INPUT', label: 'Text Input' },
-      { id: 'TEXT', label: 'Multiple' },
-      { id: 'NUMBER', label: 'Phone' },
+      { id: 'TEXT', label: 'Text' },
+      { id: 'NUMBER', label: 'Number' },
     ],
     'Date Elements': [
       { id: 'DATE_PICKER', label: 'Date' },

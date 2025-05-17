@@ -9,7 +9,7 @@
     // Props for the component
     let {defaultDevice} = $props() // Default selected device
     $effect(()=>{
-      console.log("FROM PREVIEW: ", defaultDevice)
+      
       if (containerWidth && containerHeight) {
         updateScale();
       }

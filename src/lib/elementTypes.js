@@ -11,10 +11,7 @@ import qa from '$lib/svgs/qa.svelte';
 //COMPONENTS
 
 
-export const ELEMENT_TYPES = {
- 
-  
-  
+export const ELEMENT_TYPES = { 
   NUMBER: {
     svg: textinput,
     type: 'NUMBER',
@@ -57,10 +54,15 @@ export const ELEMENT_TYPES = {
         type: 'text',
         defaultValue: 'Phone',
       },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue:''
+      },
       
     ],
   },
- 
   DATETIME_PICKER: {
     svg: datepicker,
     type: 'DATETIME_PICKER',
@@ -106,10 +108,14 @@ export const ELEMENT_TYPES = {
         type: 'checkbox',
         defaultValue: true,
       },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'date',
+        defaultValue:''
+      },
     ],
   },
-
-
   TEXT_INPUT: {
     svg: textinput,
     type: 'TEXT_INPUT',
@@ -166,7 +172,62 @@ export const ELEMENT_TYPES = {
         property: 'label',
         type: 'text',
         defaultValue: 'Text Input'
-      }
+      },
+       {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue:''
+      },
+    ]
+  },
+  TEXTAREA_INPUT: {
+    svg: textinput,
+    type: 'TEXTAREA_INPUT',
+    label: 'Textarea Input',
+    component: 'TextareaInput',
+    defaultStyles: {
+      width: '100%',
+      height: "300px",
+      padding: '12px 16px',
+      'border-radius': '20px',
+      margin: '8px 0',
+      'font-size': '15px',
+      'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+      'background-color': '#ffffff',
+      'transition': 'border-color 0.2s ease, background-color 0.2s ease',
+      'color': '#0f1419',
+      border: '1px solid #1d9bf0',
+      'box-shadow': 'none',
+      'box-sizing': 'border-box',
+      'focus-border-color': '#1d9bf0',
+      'focus-background-color': '#ffffff',
+    },
+    editableProperties: [
+      {
+        label: 'Placeholder',
+        property: 'placeholder',
+        type: 'text',
+        defaultValue: 'Tell us something..'
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false
+      },
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Textarea Input'
+      },
+       {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue:''
+      },
     ]
   },
   BUTTON: {
@@ -258,7 +319,13 @@ export const ELEMENT_TYPES = {
         type: 'select',
         options: ['1 day', '3 days', '7 days', '1 month'],
         defaultValue: '1 day'
-      }
+      },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue:'Option 1'
+      },
     ]
   },
   TEST: {
@@ -301,7 +368,13 @@ export const ELEMENT_TYPES = {
         property: 'multiple',
         type: 'checkbox',
         defaultValue: false
-      }
+      },
+       {
+        label: 'Value',
+        property: 'value',
+        type: 'array',
+        defaultValue:[]
+      },
     ]
   },
   SECTION_DIVIDER: {
@@ -361,6 +434,12 @@ export const ELEMENT_TYPES = {
          'Option B',
          'Option C'
         ]
+      },
+        {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue: 'Option C'
       },
       {
         label: 'Title',
@@ -466,7 +545,13 @@ export const ELEMENT_TYPES = {
         property: 'maxSize',
         type: 'number',
         defaultValue: 20
-      }
+      },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'text',
+        defaultValue: ''
+      },
     ]
   },
   DATE_PICKER: {
@@ -483,7 +568,7 @@ export const ELEMENT_TYPES = {
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'font-size': '15px',
       'color': '#0f1419',
-      'transition': 'border-color 0.2s ease, background-color 0.2s ease',
+      'transition': 'border-color 0.2s ease, 0.2s ease',
       'focus-border-color': '#1d9bf0',
       'focus-background-color': '#ffffff',
       'margin': '8px 0'
@@ -512,7 +597,13 @@ export const ELEMENT_TYPES = {
         property: 'showIcon',
         type: 'checkbox',
         defaultValue: true
-      }
+      },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'date',
+        defaultValue: ''
+      },
     ]
   },
   TEXT: {
@@ -602,7 +693,6 @@ export const ELEMENT_TYPES = {
       },
     ],
   },
-
   CHECKBOX: {
     svg: multisteps,
     type: 'CHECKBOX',
@@ -610,7 +700,7 @@ export const ELEMENT_TYPES = {
     component: 'Checkbox',
     defaultStyles: {
       width: 'auto',
-      padding: '8px 0',
+      padding: '2px 0',
       'font-size': '15px',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       color: '#0f1419',
@@ -635,9 +725,14 @@ export const ELEMENT_TYPES = {
         type: 'checkbox',
         defaultValue: false,
       },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'boolean',
+        defaultValue: true
+      },
     ],
   },
-
   YES_NO: {
     svg: multisteps,
     type: 'YES_NO',
@@ -670,12 +765,23 @@ export const ELEMENT_TYPES = {
         defaultValue: 'Yes',
       },
       {
+        label: 'label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Do you agree?',
+      },
+      {
         label: 'Required',
         property: 'required',
         type: 'checkbox',
         defaultValue: false,
       },
+      {
+        label: 'Value',
+        property: 'value',
+        type: 'boolean',
+        defaultValue: true
+      },
     ],
   },
-
 };

@@ -30,7 +30,6 @@
       const updatedElements = elements.map((el) =>
         el.id === selectedElement.id ? { ...el, properties: { ...el.properties, [property]: value } } : el
       );
-      console.log(updatedElements)
       // selectedElementStore.set(updatedElements)
       return updatedElements;
     });
@@ -46,7 +45,7 @@
         } : el
       );
 
-      
+      // console.log($formStore)
       // selectedElementStore.set(updatedElements)
       return updatedElements;
 
@@ -115,6 +114,14 @@
      
     });
   }
+
+  onMount(()=>{
+    document.addEventListener('keydown', (e)=>{
+      if(e.key=="Delete"){
+        deleteFormStoreEntity([selectedElement.id])
+      }
+    })
+  })
 </script>
 
 <div class="w-[30%] h-full flex flex-col border-l border-gray-200 bg-white overflow-y-scroll">
@@ -220,6 +227,7 @@
                       />
                     {/if}
                       <button 
+                      aria-label="delete-component"
                         class="p-1 text-red-500 hover:text-red-700"
                         on:click={() => removeArrayOption(prop.property, i)}
                       >
@@ -232,7 +240,6 @@
                 <button 
                   class="w-full py-1 px-2 text-sm text-blue-500 hover:text-blue-700 border border-dashed border-gray-300 rounded hover:bg-blue-50 flex items-center justify-center gap-1"
                   on:click={() => {
-                    console.log(prop, )
                     addArrayOption(prop.property, formElement_.properties.options[formElement_.properties.options.length-1]                                                                                                                         )
                   }}
                 >
@@ -265,6 +272,17 @@
           </select>
         </div>
 
+        {#if selectedElement.styles.height}
+        <div class="space-y-1">
+          <label class="text-sm font-medium text-gray-900">Height</label>
+          <input
+            type="text"
+            class="w-full px-3 py-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            bind:value={selectedElement.styles.height}
+            on:input={(e) => updateStyle('height', e.target.value)}
+          />
+        </div>
+        {/if}
         <div class="space-y-1">
           <label class="text-sm font-medium text-gray-900">Padding</label>
           <input

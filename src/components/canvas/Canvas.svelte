@@ -8,8 +8,8 @@
   import * as FormElements from "../form-elements/index";
   import {dndzone} from "svelte-dnd-action";
   const flipDurationMs = 300;
-  let elements = [];
-  let draggedElement = null;
+  let elements = $state([]);
+  let draggedElement = $state(null);
 
   // Subscribe to the form store
   formStore.subscribe((value) => {
@@ -33,6 +33,7 @@
           acc[prop.property] = prop.defaultValue;
           return acc;
         }, {}),
+        
       };
 
       formStore.update((currentElements) => [...currentElements, newElement]);
@@ -43,7 +44,6 @@
   // Handle selecting an element
   function selectElement(element) {
     selectedElementStore.set(element);
-    // console.log('selected:', element)
   }
 
   function handleDndConsider(e) {
@@ -60,35 +60,33 @@
 </script>
 
 
-  <div
+<div
     tabindex="0"
     role="button"
       class="canvas w-[100%] flex flex-col overflow-scroll m-auto h-full py-44"
-      on:dragover={(e) => e.preventDefault()}
-      on:drop={handleDrop}
-      use:dndzone="{{items:elements, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}"
+      ondragover={(e) => e.preventDefault()}
+      ondrop={handleDrop}
+      use:dndzone="{{items:elements, flipDurationMs}}" onconsider="{handleDndConsider}" onfinalize="{handleDndFinalize}"
     >
       {#each elements as element (element.id)}
-    
+        {@const Component = FormElements[element.component]}
         <a
           href={'#'}
           class="form-element"
-          on:click={() => selectElement(element)}
+          onclick={() => selectElement(element)}
           role='button'
           tabindex='0'
         >
-          <svelte:component this={FormElements[element.component]} element={element} />
+         <Component element={element}/>
         </a>
       {/each}
-    </div>
+</div>
 
 
 <style>
   .canvas {
-    
-    border: 1px solid #ccc;
+    border: 1px solid #e9e7e7;
     padding: 16px;
-   
   }
   .form-element {
     margin-bottom: 0px;

@@ -1,50 +1,51 @@
 <script>
-// @ts-nocheck
 
 
-  import { formStore } from '../../stores/formStore';
+   import { updateFormStoreValue } from "../../stores/formStore";
 
-    export let element;
-    
+ 
+  let {element}=$props();
+
+
+  // @ts-ignore
+  const handleUpdate=(e)=>{
+    const selected = element.properties.options[e]
    
-   
-   
-    $: selectedOption = null;
-  
-  
+    
+    updateFormStoreValue(element.id, "value", selected)
+    // console.log(`To Be Saved:\n${valToSave},\n Current:\n${element.properties.value},\n all-data:\n${element}`)
+  }
 
-    $:console.log(element,$formStore )
-    
-    
+
+  $effect(()=>{
+     console.log(element.properties.value)
+     
+  })
+
+  const check=(/** @type {any} */ option)=>(option==element.properties.value)
   </script>
-  
-  <div 
+
+  <div
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     class="voting-component"
   >
-    <h3 class="text-lg font-semibold mb-3 rounded bg-gray-100 border-none p-3">{element?.properties?.question}</h3>
-    
-    <div class="space-y-2 mb-3">
-      {#each element?.properties?.options||[] as option, index (index)}
-        <div class="flex items-center w-full">
+    <h3 class="text-lg font-semibold mb-3 rounded bg-[#ada7a024] border-none p-3">{element?.properties?.question}</h3>
+
+    <div class=" mb-3">
+      {#key element.properties.value}
+        {#each element.properties.options as option, index (index)}
+        <div  class="flex items-center w-full hover:bg-[#ada7a024] p-2 rounded-2xl ">
           <input
             type="radio"
-            id={`option-${index}`}
             name="vote"
-            class="mr-2"
-            bind:group={selectedOption}
-            value={option}
+            checked={check(option)}
+            class="mr-2 cursor-pointer"
+            onclick={()=>handleUpdate(index)}
           />
-          <input
-            type="text"
-            class="flex-1 p-1 border-none rounded"
-            value={option}
-            disabled
-            on:input={(e) => updateOption(index, e.target.value)}
-          />
-         
-        </div>
+          <span   class="flex-1 p-1 border-none rounded w-full bg-transparent text-start cursor-pointer">{option}</span>
+    </div>
       {/each}
+      {/key}
     </div>
   
    
