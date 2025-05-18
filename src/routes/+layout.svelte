@@ -5,7 +5,7 @@
 </script>
 
 
-<main class=" bg-neutral-100"> 
+<main class=" bg-gray-100"> 
 
 	{@render children()}
 </main>

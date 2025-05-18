@@ -6,7 +6,9 @@
   import { formStore } from '../../stores/formStore';
   import { selectedElementStore } from '../../stores/uiStore';
   import * as FormElements from "../form-elements/index";
+  //import uuid from "uuid"
   import {dndzone} from "svelte-dnd-action";
+  import { v1 as uuidv1 } from 'uuid';
   const flipDurationMs = 300;
   let elements = $state([]);
   let draggedElement = $state(null);
@@ -25,7 +27,7 @@
     
     if (elementType) {
       const newElement = {
-        id: Date.now(), // Unique ID
+        id:`${ Date.now()}-${uuidv1()}`, // Unique ID
         type: elementType.type,
         component: elementType.component,
         styles: { ...elementType.defaultStyles },
@@ -60,10 +62,11 @@
 </script>
 
 
-<div
+<div class="canvas w-full overflow-scroll">
+    <div
     tabindex="0"
     role="button"
-      class="canvas w-[100%] flex flex-col overflow-scroll m-auto h-full py-44"
+      class=" w-[80%] flex flex-col  m-auto h-full py-20  "
       ondragover={(e) => e.preventDefault()}
       ondrop={handleDrop}
       use:dndzone="{{items:elements, flipDurationMs}}" onconsider="{handleDndConsider}" onfinalize="{handleDndFinalize}"
@@ -80,6 +83,7 @@
          <Component element={element}/>
         </a>
       {/each}
+</div>
 </div>
 
 

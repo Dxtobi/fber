@@ -21,7 +21,7 @@ export const ELEMENT_TYPES = {
       width: '100%',
       
       'border-radius': '20px',
-      border: '1px solid #1d9bf0',
+      
       margin: '8px 0',
       'font-size': '15px',
       'font-family':
@@ -197,7 +197,6 @@ export const ELEMENT_TYPES = {
       'background-color': '#ffffff',
       'transition': 'border-color 0.2s ease, background-color 0.2s ease',
       'color': '#0f1419',
-      border: '1px solid #1d9bf0',
       'box-shadow': 'none',
       'box-sizing': 'border-box',
       'focus-border-color': '#1d9bf0',
@@ -419,12 +418,19 @@ export const ELEMENT_TYPES = {
     defaultStyles: {
       width: '100%',
       'border-radius':'20px',
-      'background-color': '#eff3f4',
-      margin: '16px 0',
+      'background-color': '#ffff',
+      color:'#000000',
+      margin: '5px 0',
       'position': 'relative',
       padding:'12px 16px',
     },
     editableProperties: [
+       {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Select'
+      },
       {
         label: 'Options',
         property: 'options',
@@ -563,7 +569,7 @@ export const ELEMENT_TYPES = {
       width: '100%',
       'border-radius': '20px',
       border: '1px solid #1d9bf0',
-      'padding': '3px 0px',
+      'padding': '12px',
       'background-color': '#f7f9f9',
       'font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
       'font-size': '15px',

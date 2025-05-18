@@ -3,6 +3,7 @@
     import { CANDC } from "$lib/utils/countryCodes";
     import { onMount } from 'svelte';
     import { updateFormStoreValue } from "../../stores/formStore";
+	import { slide } from "svelte/transition";
     
     const countryCodes = CANDC;
     let selectedCountry = $state(countryCodes.find((c) => c.code === 'NG')); // Default to US
@@ -108,7 +109,8 @@
       {#if dropdownOpen}
         <div 
           bind:this={dropdownElement}
-          class="absolute z-10 mt-1 w-full bg-white rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto"
+          in:slide={{axis:'y'}}
+          class="absolute z-10 mt-1 w-full bg-[#ffffff3f] backdrop-blur-xl  rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto"
         >
           <!-- Search input -->
           <div class="sticky top-0 bg-white p-2 border-b border-gray-100">
@@ -133,7 +135,7 @@
               {#each filteredCountries as country}
                 <button
                   type="button"
-                  class="flex items-center w-full px-4 py-2 hover:bg-gray-50 focus:bg-gray-50 focus:outline-none text-left"
+                  class="flex items-center w-full px-4 py-2 hover:bg-blue-200 focus:bg-gray-50 focus:outline-none text-left"
                   class:bg-blue-50={selectedCountry.code === country.code}
                   onclick={() => handleCountrySelect(country)}
                 >

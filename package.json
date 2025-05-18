@@ -41,6 +41,7 @@
 		"drizzle-orm": "^0.40.0",
 		"iconify-icon": "^3.0.0",
 		"mongodb": "^6.16.0",
+		"mongoose": "^8.15.0",
 		"postgres": "^3.4.5",
 		"svelte-color-picker": "^1.0.7",
 		"svelte-dnd-action": "^0.9.61",

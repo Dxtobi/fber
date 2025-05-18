@@ -26,7 +26,7 @@
       checked={selectedValue}
       placeholder={element?.properties?.placeholder || "Select date"}
       onchange={handleDateChange}
-      class="date-picker-input"
+      class={`date-picker-input ${selectedValue?"bg-[#1d9bf0]":''}`}
       
     />
   
