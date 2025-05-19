@@ -11,10 +11,10 @@
   
   // Group elements by category
   const categories = {
-    'Layout Elements': [
-      { id: 'SECTION_DIVIDER', label: 'Sections' },
+    // 'Layout Elements': [
+    //   { id: 'SECTION_DIVIDER', label: 'Sections' },
       
-    ],
+    // ],
     'Text Input Elements': [
       
       { id: 'TEXT_INPUT', label: 'Text Input' },
@@ -27,7 +27,6 @@
     ],
     'Date Elements': [
       { id: 'DATE_PICKER', label: 'Date' },
-      { id: 'DATETIME_PICKER', label: 'Date & Time' },
     ],
     'Multi Elements': [
       { id: 'BUTTON', label: 'Button' },
@@ -35,7 +34,7 @@
       { id: 'SELECT', label: 'Dropdown' },
       { id: 'CHECKBOX', label: 'Checkbox' },
       { id: 'VOTING', label: 'Poll' },
-      { id: 'TEST', label: 'Profile' },
+      { id: 'TEST', label: 'Test (CBT)' },
     ],
     'Media Elements': [
       { id: 'FILE_UPLOAD', label: 'Attachments' },

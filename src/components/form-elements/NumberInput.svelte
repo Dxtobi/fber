@@ -110,7 +110,7 @@
         <div 
           bind:this={dropdownElement}
           in:slide={{axis:'y'}}
-          class="absolute z-10 mt-1 w-full bg-[#ffffff3f] backdrop-blur-xl  rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto"
+          class="absolute z-10 mt-1 w-full bg-[#ffffff3f] backdrop-blur-sm rounded-xl shadow-lg border border-gray-200 max-h-80 overflow-y-auto"
         >
           <!-- Search input -->
           <div class="sticky top-0 bg-white p-2 border-b border-gray-100">

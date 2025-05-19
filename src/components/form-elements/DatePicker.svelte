@@ -299,7 +299,7 @@
     top: calc(100% + 5px);
     left: 0;
     width: 280px;
-    background-color: #ffffff61;
+    background-color: #ffffff0b;
     backdrop-filter: blur(15px);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

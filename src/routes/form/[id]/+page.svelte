@@ -19,12 +19,8 @@
 
       elements.forEach(component => {
         const { properties } = component;
-
-       
         if (properties && properties.label !== undefined && properties.value !== undefined) {
-          
           const normalizedLabel = properties.label.toLowerCase().replace(/[^a-z]/g, '_');
-
           result[normalizedLabel] = {
             value: properties.value,
             originalLabel: properties.label
@@ -32,6 +28,7 @@
         }
       });
 
+      console.log(result)
       return result;
     }
 </script>
@@ -61,7 +58,7 @@
       </div>
     </div>
     
-    <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4">
+    <div class="mt-6 flex flex-wrap justify-center  w-full gap-4">
       <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Home</a>
       <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">About</a>
       <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Services</a>

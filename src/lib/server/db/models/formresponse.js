@@ -1,22 +1,19 @@
 import mongoose from 'mongoose';
 
 
-const formSchema = new mongoose.Schema({
-  components: {
+const formResponseSchema = new mongoose.Schema({
+  response: {
     type: [Object], 
     required: true
   },
-  user: {
+  form: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'form',
       required: true,
     },
-  link:{
-      type:String
-  },
   createdAt: { type: Date, default: Date.now }
 },{
     timestamps: true,
   });
 
-export default mongoose.model('form', formSchema);
+export default mongoose.model('formResponse', formResponseSchema);
