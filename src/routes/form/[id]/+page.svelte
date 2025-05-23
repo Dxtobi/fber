@@ -170,7 +170,9 @@
 </svelte:head>
 <header class="fixed top-0 left-0 w-full backrop-filter shadow-md p-4 z-10 flex justify-between  bg-white">
   <!-- LOGO -->
-  <img src="/logo-black.svg" alt="Logo" class="w-10 h-10  " />
+ <a href="/">
+ <img src="/logo-black.svg" alt="Logo" class="w-10 h-10  " />
+</a>
   <!-- SIGNUP -->
   
 </header>
