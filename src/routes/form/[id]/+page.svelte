@@ -86,6 +86,7 @@
         
         console.log(data_)
         goto(`/congratulations`)
+        window.location.href='/congratulations'
       }
       
       isLoading=false

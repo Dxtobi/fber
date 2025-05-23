@@ -86,7 +86,7 @@
           onclick={toggleDropdown}
         >
           <span class="mr-1 text-lg ">{getFlagEmoji(selectedCountry.code)}</span>
-          <span class="mr-1 text-sm font-medium">{selectedCountry.dial_code}</span>
+          
           <span ><iconify-icon icon="fa:sort-down"   ></iconify-icon></span>
         </button>
         
