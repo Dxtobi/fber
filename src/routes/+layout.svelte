@@ -17,8 +17,8 @@
   <meta property="og:title" content="FormInk - Build Smart Forms with AI-Powered Insights" />
   <meta property="og:description" content="Create beautiful, responsive forms effortlessly with FormInk's drag-and-drop builder. Leverage AI-powered analytics to gain actionable insights and optimize your workflows." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.FormInk.com " />
-  <meta property="og:image" content="https://www.FormInk.com/assets/images/og-image.png " />
+  <meta property="og:url" content="https://fber.vercel.app  " />
+  <meta property="og:image" content="/favicon.png " />
   <meta property="og:image:alt" content="FormInk - Smart Form Builder with AI Features" />
   <meta property="og:site_name" content="FormInk" />
 
@@ -26,17 +26,17 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="FormInk - Build Smart Forms with AI-Powered Insights" />
   <meta name="twitter:description" content="Create beautiful, responsive forms effortlessly with FormInk's drag-and-drop builder. Leverage AI-powered analytics to gain actionable insights and optimize your workflows." />
-  <meta name="twitter:image" content="https://www.FormInk.com/assets/images/twitter-image.png " />
+  <meta name="twitter:image" content="/favicon.png " />
   <meta name="twitter:image:alt" content="FormInk - Smart Form Builder with AI Features" />
-  <meta name="twitter:site" content="@FormFlowAI" />
-  <meta name="twitter:creator" content="@FormFlowAI" />
+  <meta name="twitter:site" content="@FormInk" />
+  <meta name="twitter:creator" content="@FormInk" />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://www.FormInk.com " />
+  <link rel="canonical" href="https://fber.vercel.app  " />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
-  <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
 
   <!-- Additional Structured Data (JSON-LD) -->
   <script type="application/ld+json">
@@ -44,7 +44,7 @@
       "@context": "https://schema.org ",
       "@type": "WebApplication",
       "name": "FormInk",
-      "url": "https://www.FormInk.com ",
+      "url": "https://fber.vercel.app ",
       "description": "Create beautiful, responsive forms effortlessly with FormInk's drag-and-drop builder. Leverage AI-powered analytics to gain actionable insights and optimize your workflows.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Any",
@@ -56,7 +56,7 @@
         "Real-time collaboration",
         "Customizable templates"
       ],
-      "image": "https://www.FormInk.com/assets/images/og-image.png ",
+      "image": "https://fber.vercel.app/logo-black.svg ",
       "offers": {
         "@type": "Offer",
         "price": "0",
