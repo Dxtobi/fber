@@ -50,8 +50,7 @@ let mouse_ref = $state(null)
     const docX = event.pageX; // Includes horizontal scroll offset
     const docY = event.pageY; // Includes vertical scroll offset
 
-    console.log(`Mouse Position (Viewport): X=${mouseX}, Y=${mouseY}`);
-    console.log(`Mouse Position (Document): X=${docX}, Y=${docY}`);
+    
 });
   })
 </script>

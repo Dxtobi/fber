@@ -82,12 +82,13 @@
       })
 
         const data_ = await res.json()
-      if (res.ok) {
+        console.log(res, data_)
+      if (!data_.error) {
       
         publishedFormStore.set([...page.data.form.components]);
         console.log(data_)
         goto(`/congratulations`)
-        window.location.href='/congratulations'
+        // window.location.href='/congratulations'
         show=true
         isLoading=false
       }
