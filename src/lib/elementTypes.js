@@ -301,6 +301,12 @@ export const ELEMENT_TYPES = {
     },
     editableProperties: [
       {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Voting'
+      },
+      {
         label: 'Question',
         property: 'question',
         type: 'text',
@@ -323,7 +329,13 @@ export const ELEMENT_TYPES = {
         label: 'Value',
         property: 'value',
         type: 'text',
-        defaultValue:'Option 1'
+        defaultValue:''
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
       },
     ]
   },
@@ -346,6 +358,12 @@ export const ELEMENT_TYPES = {
       'box-shadow': '0 1px 3px rgba(0, 0, 0, 0.05)'
     },
     editableProperties: [
+      {
+        label: 'Label',
+        property: 'label',
+        type: 'text',
+        defaultValue: 'Test'
+      },
       {
         label: 'Question',
         property: 'question',
@@ -373,6 +391,12 @@ export const ELEMENT_TYPES = {
         property: 'value',
         type: 'array',
         defaultValue:[]
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
       },
     ]
   },
@@ -446,6 +470,12 @@ export const ELEMENT_TYPES = {
         property: 'value',
         type: 'text',
         defaultValue: 'Option C'
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
       },
       {
         label: 'Title',
@@ -558,6 +588,12 @@ export const ELEMENT_TYPES = {
         type: 'text',
         defaultValue: ''
       },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
+      },
     ]
   },
   DATE_PICKER: {
@@ -609,6 +645,12 @@ export const ELEMENT_TYPES = {
         property: 'value',
         type: 'date',
         defaultValue: ''
+      },
+      {
+        label: 'Required',
+        property: 'required',
+        type: 'checkbox',
+        defaultValue: false,
       },
     ]
   },

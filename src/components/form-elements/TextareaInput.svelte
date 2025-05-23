@@ -1,7 +1,7 @@
 
 <script>
 // @ts-nocheck
-import { updateFormStoreValue } from "../../stores/formStore";
+import { updateFormStoreValue } from "../../stores/publishedForm";
 let { element} = $props()  
 </script>
   

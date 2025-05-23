@@ -1,5 +1,5 @@
 <script>
-  import { updateFormStoreValue } from "../../stores/formStore";
+  import { updateFormStoreValue } from "../../stores/publishedForm";
   
   let {element} = $props();
   let selected = $derived(element.properties.value);
@@ -23,6 +23,7 @@
   <!-- Dropdown header -->
   <button 
     class="dropdown-header "
+    type="button"
     onclick={toggleDropdown}
     style={Object.entries(element.styles).map(([k, v]) => `${k}: ${v}`).join('; ')}
   >

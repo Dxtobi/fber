@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import connectDB from '$lib/server/db';
 import { UserModel } from '$lib/server/db/models/user';
+import { clearAuthCookie, setAuthCookie } from '../../../hooks.server';
 
 
 
@@ -15,25 +16,30 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
-// Handler for POST /api/auth/register
-export async function POST({ request, url }) {
-  const path = url.pathname;
-  
-  // Register endpoint
-  if (path.endsWith('/register')) {
+
+export async function POST({ request, url, locals }) {
+    // await connectDB();
+    const params_ = url.searchParams.get('param');
+    
+ 
+  if (params_=='register') {
     return handleRegister(request);
   }
   
-  // Login endpoint
-  if (path.endsWith('/login')) {
-    return handleLogin(request);
+ 
+  if (params_=='login') {
+    return handleLogin(request, locals);
   }
 
-  // If the path doesn't match any endpoint
+  if (params_=='logout') {
+    return handleLogout();
+  }
+
+  
   return json({ error: 'Endpoint not found' }, { status: 404 });
 }
 
-// Handler for user registration
+
 // @ts-ignore
 async function handleRegister(request) {
   try {
@@ -89,7 +95,7 @@ async function handleRegister(request) {
     
     await newUser.save();
     
-    // Return success response with auth token and user info (except password)
+    
     const userData = {
       id: newUser._id,
       email: newUser.email,
@@ -97,12 +103,14 @@ async function handleRegister(request) {
       userAuthToken: newUser.userAuthToken
     };
     
-    return json({
+    let response = json({
       message: 'User registered successfully',
       user: userData
     }, { status: 201 });
+    return setAuthCookie(response, userAuthToken);
     
   } catch (error) {
+    
     console.error('Registration error:', error);
     return json({ error: 'Server error during registration' }, { status: 500 });
   }
@@ -110,39 +118,38 @@ async function handleRegister(request) {
 
 // Handler for user login
 // @ts-ignore
-async function handleLogin(request) {
+async function handleLogin(request, locals) {
   try {
-    // Connect to the database
+    
     await connectDB();
     
-    // Parse the request body
+   
     const { email, password } = await request.json();
     
-    // Validate input fields
+    
     if (!email || !password) {
       return json({ error: 'Email and password are required' }, { status: 400 });
     }
     
-    // Find the user by email
+    
     const user = await UserModel.findOne({ email });
     
     if (!user) {
       return json({ error: 'Invalid email or password' }, { status: 401 });
     }
     
-    // Compare passwords
+    
     const isPasswordValid = await bcrypt.compare(password, user.password);
     
     if (!isPasswordValid) {
       return json({ error: 'Invalid email or password' }, { status: 401 });
     }
     
-    // Generate new auth token on login
+    
     const userAuthToken = uuidv4();
     user.userAuthToken = userAuthToken;
     await user.save();
-    
-    // Return success response with auth token and user info (except password)
+
     const userData = {
       id: user._id,
       email: user.email,
@@ -150,13 +157,33 @@ async function handleLogin(request) {
       userAuthToken: user.userAuthToken
     };
     
-    return json({
+    
+    let response = json({
       message: 'Login successful',
       user: userData
     });
+    // Set the auth cookie
+        locals.user = { 
+          id: user._id, 
+          username: user.username, 
+          email: user.email 
+        }
+     return setAuthCookie(response, userAuthToken);
     
   } catch (error) {
     console.error('Login error:', error);
+    
+
     return json({ error: 'Server error during login' }, { status: 500 });
+  }
+}
+
+async function handleLogout() {
+  try {
+    const response = json({ message: 'Logout successful' });
+    return clearAuthCookie(response);
+  } catch (error) {
+    console.error('Logout error:', error);
+    return json({ error: 'Server error during logout' }, { status: 500 });
   }
 }

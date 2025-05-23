@@ -1,17 +1,3 @@
-
-
-// Save auth token to localStorage
-/**
- * Auth utility functions for client-side use
- * @param {string} token
- */
-export function saveAuthToken(token) {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('authToken', token);
-  }
-}
-
-// Save user data to localStorage
 /**
  * @param {any} userData
  */
@@ -21,13 +7,6 @@ export function saveUserData(userData) {
   }
 }
 
-// Get auth token from localStorage
-export function getAuthToken() {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('authToken');
-  }
-  return null;
-}
 
 // Get user data from localStorage
 export function getUserData() {
@@ -41,26 +20,21 @@ export function getUserData() {
 // Clear auth data on logout
 export function clearAuthData() {
   if (typeof window !== 'undefined') {
-    localStorage.removeItem('authToken');
     localStorage.removeItem('userData');
   }
 }
 
 // Check if user is authenticated
 export function isAuthenticated() {
-  return !!getAuthToken();
+  return !!getUserData();
 }
 
-// Add auth header to fetch requests
-export function addAuthHeader(headers = {}) {
-  const token = getAuthToken();
-  if (token) {
-    return {
-      ...headers,
-      'Authorization': `Bearer ${token}`
-    };
+
+
+export function clearUserData() {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('userData');
   }
-  return headers;
 }
 
 // Auth API client
@@ -72,7 +46,7 @@ export const authApi = {
      * @param {any} username
      */
   async register(email, password, username) {
-    const response = await fetch('/api/auth/register', {
+    const response = await fetch('/api/auth?param=register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -95,7 +69,7 @@ export const authApi = {
      * @param {any} password
      */
   async login(email, password) {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch('/api/auth/?param=login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -111,15 +85,61 @@ export const authApi = {
     
     // Save auth data if login is successful
     if (data.user && data.user.userAuthToken) {
-      saveAuthToken(data.user.userAuthToken);
       saveUserData(data.user);
     }
     
     return data;
   },
-  
+   // @ts-ignore
+   async checkAuth(fetch) {
+    try {
+      const response = await fetch('/api/check', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+
+
+      
+      if (!response.ok) {
+        console.log('User not authenticated: ', response.status);
+        clearUserData();
+        return false;
+      }
+      
+      const data = await response.json();
+      console.log('User authenticated: ', data);
+      if (data.user) {
+        saveUserData(data.user);
+        return true;
+      } else {
+        console.log('User authenticated: ', data);
+        clearUserData();
+        return false;
+      }
+    } catch (error) {
+        console.log('User authenticated error: ', error);
+      clearUserData();
+      return false;
+    }
+  },
   // Logout current user
-  logout() {
-    clearAuthData();
+  async logout() {
+    const response = await fetch('/api/auth?param=logout', {
+      method: 'POST',
+      // This is important for cookies to work
+      credentials: 'include'
+    });
+    
+    clearUserData();
+    
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Logout failed');
+    }
+    
+    return await response.json();
   }
 };

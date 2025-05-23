@@ -2,7 +2,7 @@
     // @ts-nocheck
     import { CANDC } from "$lib/utils/countryCodes";
     import { onMount } from 'svelte';
-    import { updateFormStoreValue } from "../../stores/formStore";
+    import { updateFormStoreValue } from "../../stores/publishedForm";
 	import { slide } from "svelte/transition";
     
     const countryCodes = CANDC;

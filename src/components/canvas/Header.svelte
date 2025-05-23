@@ -1,12 +1,12 @@
 <script>
   import { createEventDispatcher } from 'svelte';
     const dispatch = createEventDispatcher();
-    export let showPreview
+    let {showPreview, isLoading, formInfo} = $props();
     // Active tab tracking
-    let activeTab = 'fields';
+    let activeTab = $state('fields');
     
     // Device type selection for preview
-    let activeDevice = 'desktop';
+    let activeDevice = $state('mobile');
     
     // Close button action - you can replace with your own function
     const handleClose = () => {
@@ -16,7 +16,7 @@
     };
     
     // Last saved tracking
-    let lastSaved = '2 mins ago';
+    let lastSaved = $state('Just now');
     
     
     // @ts-ignore
@@ -33,6 +33,22 @@
         showPreview=false
       }
     };
+
+    const publishForm = () => {
+      dispatch('publishForm');
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      lastSaved = `${hours}:${minutes}`;
+    };
+
+    const saveForm = () => {
+      dispatch('saveForm');
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      lastSaved = `${hours}:${minutes}`;
+    };
     
     // Device options for preview
     const deviceOptions = [
@@ -47,21 +63,42 @@
   <div class="bg-white border-b border-gray-200 shadow-sm">
     <!-- Top header with title and close button -->
     <div class="flex items-center justify-between px-4 pt-3 pb-2">
-      <div>
-        <h1 class="text-lg font-semibold text-gray-800">Form Builder</h1>
-        <p class="text-xs text-gray-500">Add and customize forms for your needs</p>
-      </div>
+     <div class="flex items-center space-x-4">
+        <a href={`/dashboard`}><img src="/logo.svg" alt="Logo" class="h-[60px] w-[60px] rounded-full" /></a>
+        <div>
+          <h1 class="text-lg font-semibold text-gray-800 capitalize">{formInfo?.formName}</h1>
+          <p class="text-xs text-gray-500">{formInfo.description}</p>
+        </div>
+     </div>
       
       <div class="flex items-center space-x-4">
         <span class="text-xs text-gray-400">Changes saved {lastSaved}</span>
         <button 
-          on:click={handleClose}
-          class="rounded-full p-1 hover:bg-gray-100 text-gray-500 transition-colors"
+          onclick={saveForm}
+          class="rounded-full px-10 py-1 {isLoading? "bg-blue-200":"bg-blue-500"} text-white hover:bg-blue-600 transition-colors space-x-2 flex items-center"
           aria-label="Close form builder"
+          disabled={isLoading}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+         <span>Save</span>
+            {#if isLoading}
+              <span class="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+            {:else}
+              <iconify-icon icon="ic:round-save" ></iconify-icon>
+            {/if}
+        </button>
+         <button 
+          onclick={publishForm}
+          class="rounded-full px-10 py-1 {isLoading? "bg-blue-200":"bg-blue-500"} text-white hover:bg-blue-600 transition-colors space-x-2 flex items-center"
+          aria-label="Close form builder"
+          disabled={isLoading}
+        >
+        <span>Publish</span>
+        {#if isLoading}
+          <span class="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+          {:else}
+          <iconify-icon icon="ic:round-publish" ></iconify-icon>
+         {/if}
+         
         </button>
       </div>
     </div>
@@ -71,28 +108,28 @@
       <div class="flex">
         <button 
           class="px-4 py-2 text-sm font-medium {activeTab === 'fields' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}"
-          on:click={() => setActiveTab('fields')}
+          onclick={() => setActiveTab('fields')}
         >
           Fields
         </button>
         
-        <button 
+        <!-- <button 
           class="px-4 py-2 text-sm font-medium {activeTab === 'workflow' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}"
-          on:click={() => setActiveTab('workflow')}
+          onclick={() => setActiveTab('workflow')}
         >
           Workflow
         </button>
         
         <button 
           class="px-4 py-2 text-sm font-medium {activeTab === 'permissions' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}"
-          on:click={() => setActiveTab('permissions')}
+          onclick={() => setActiveTab('permissions')}
         >
           Permissions
-        </button>
+        </button> -->
         
         <button 
           class="px-4 py-2 text-sm font-medium {activeTab === 'preview' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-gray-700'}"
-          on:click={() => {setActiveTab('preview') }}
+          onclick={() => {setActiveTab('preview') }}
         >
           Preview
         </button>
@@ -104,7 +141,7 @@
           {#each deviceOptions as device}
             <button
               class="px-3 py-2 text-sm {activeDevice === device.id ? 'text-blue-600 bg-blue-50' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'} rounded-md transition-colors mx-0.5"
-              on:click={() => {activeDevice = device.id; dispatch('setDeviceType', {device:device.id})}}
+              onclick={() => {activeDevice = device.id; dispatch('setDeviceType', {device:device.id})}}
               title={device.label}
             >
               {#if device.id === 'mobile'}

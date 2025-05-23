@@ -1,10 +1,13 @@
 import mongoose from 'mongoose';
 
 
-const formSchema = new mongoose.Schema({
+const FormSchema = new mongoose.Schema({
   components: {
     type: [Object], 
     required: true
+  },
+  description: {
+    type: String,
   },
   user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,9 +17,18 @@ const formSchema = new mongoose.Schema({
   link:{
       type:String
   },
+  formName:{
+      type:String,
+      required:true
+  },
+
+  status:{
+      type:String,
+      enum: ['draft', 'published', 'archived', 'deleted'],
+      default: 'draft'
+  },
   createdAt: { type: Date, default: Date.now }
 },{
     timestamps: true,
   });
-
-export default mongoose.model('form', formSchema);
+export const FormModel = mongoose.models.Form ?? mongoose.model('Form', FormSchema);

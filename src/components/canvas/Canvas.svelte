@@ -56,7 +56,7 @@
   function handleDndFinalize(e) {
     let items = e.detail.items;
     formStore.update((currentElements) => [...items]);
-    console.log(e.detail)
+    
 
     }
 </script>
@@ -66,13 +66,14 @@
     <div
     tabindex="0"
     role="button"
-      class=" w-[80%] flex flex-col  m-auto h-full py-20  "
+      class=" w-[80%] flex flex-col  m-auto overflow-h-scroll min-h-[300vh]  py-20"
       ondragover={(e) => e.preventDefault()}
       ondrop={handleDrop}
       use:dndzone="{{items:elements, flipDurationMs}}" onconsider="{handleDndConsider}" onfinalize="{handleDndFinalize}"
     >
       {#each elements as element (element.id)}
         {@const Component = FormElements[element.component]}
+        {console.log(element.id)}
         <a
           href={'#'}
           class="form-element"

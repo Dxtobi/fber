@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 
-  import { updateFormStoreValue } from "../../stores/formStore";
+  import { updateFormStoreValue } from "../../stores/publishedForm";
   import { onMount } from "svelte";
   
   let { element } = $props();
@@ -171,7 +171,7 @@
       <div class="calendar-dropdown">
          <div class="calendar-header">
           <!-- svelte-ignore a11y_consider_explicit_label -->
-          <button class="month-nav-btn" onclick={prevYear}>
+          <button class="month-nav-btn" onclick={prevYear} type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
@@ -182,7 +182,7 @@
           </div>
           
           <!-- svelte-ignore a11y_consider_explicit_label -->
-          <button class="month-nav-btn" onclick={nextYear}>
+          <button class="month-nav-btn" onclick={nextYear} type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -190,7 +190,7 @@
         </div>
         <div class="calendar-header">
           <!-- svelte-ignore a11y_consider_explicit_label -->
-          <button class="month-nav-btn" onclick={prevMonth}>
+          <button class="month-nav-btn" onclick={prevMonth} type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
@@ -201,7 +201,7 @@
           </div>
           
           <!-- svelte-ignore a11y_consider_explicit_label -->
-          <button class="month-nav-btn" onclick={nextMonth}>
+          <button class="month-nav-btn" onclick={nextMonth} type="button">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
@@ -220,6 +220,7 @@
               {#if isCurrentMonth}
                 <button 
                   class="day-cell" 
+                  type="button"
                   class:selected={isSelected}
                   class:today={isToday}
                   onclick={() => date && updateDate(date)}
@@ -233,10 +234,10 @@
           </div>
           
           <div class="calendar-footer">
-            <button class="today-btn" onclick={() => updateDate(new Date().toISOString().split('T')[0])}>
+            <button type="button" class="today-btn" onclick={() => updateDate(new Date().toISOString().split('T')[0])}>
               Today
             </button>
-            <button class="close-btn" onclick={() => showCalendar = false}>
+            <button type="button" class="close-btn" onclick={() => showCalendar = false}>
               Close
             </button>
           </div>

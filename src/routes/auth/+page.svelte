@@ -168,14 +168,11 @@
     <!-- Header -->
     <div class="p-5 flex flex-col items-center">
       <!-- Logo -->
-      <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
+      <div class=" rounded-full  flex items-center justify-center mb-4">
+        <img src="/logo.svg" alt="Logo" class="h-20 w-20" />
       </div>
       
-      <!-- Title -->
-      <h1 class="text-gray-500 text-2xl font-bold">{isLogin ? 'Sign in' : 'Create account'}</h1>
+     
       
       <!-- Toggle buttons -->
       <div class="flex  rounded-full mt-4 p-1 w-full max-w-xs bg-gray-300">

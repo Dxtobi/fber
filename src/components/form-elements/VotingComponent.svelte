@@ -1,7 +1,7 @@
 <script>
 
 
-   import { updateFormStoreValue } from "../../stores/formStore";
+   import { updateFormStoreValue } from "../../stores/publishedForm";
 
  
   let {element}=$props();
@@ -25,6 +25,7 @@
   const check=(/** @type {any} */ option)=>(option==element.properties.value)
   </script>
 
+ <span class="block text-sm font-medium text-gray-500 mb-1 ml-1">{element.properties.label}</span>
   <div
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     class="voting-component"

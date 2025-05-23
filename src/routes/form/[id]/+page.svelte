@@ -2,21 +2,33 @@
     // @ts-nocheck
     import { onMount } from 'svelte';
     import * as FormElements from "../../../components/form-elements";
-    import { formStore } from '../../../stores/formStore';
+    import { publishedFormStore, publishedFormStoreLoading } from '../../../stores/publishedForm';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
+	import Footer from '../../../components/landing/Footer.svelte';
         
-    let elements = $state($formStore);
-    
-    formStore.subscribe((value) => {
+
+    onMount(() => {
+      publishedFormStore.set([...page.data.form.components]);
+    });
+    let elements = $state($publishedFormStore);
+    let hasError= $state(false);
+    let isLoading= $state(false);
+
+    publishedFormStore.subscribe((value) => {
       elements = value;
     });
     
     $effect(()=>{
-      $inspect(elements)
+      $inspect(page.data)
     })
     
-    function callFormSubmit() {
+    function callFormSubmit(e) {
+      e.preventDefault();
+     try{
+       publishedFormStoreLoading.update(()=>true)
       const result = {};
-
+      hasError = false;
       elements.forEach(component => {
         const { properties } = component;
         if (properties && properties.label !== undefined && properties.value !== undefined) {
@@ -25,45 +37,95 @@
             value: properties.value,
             originalLabel: properties.label
           };
+            if (properties.required === true) {
+            const value = properties.value;
+            const isEmpty =
+              value === undefined ||
+              value === null ||
+              (typeof value === "string" && value.trim() === "") ||
+              (Array.isArray(value) && value.length === 0) ||
+              (typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0);
+
+            if (isEmpty) {
+              hasError = true;
+            }
+            }
         }
       });
+      if (hasError) {
+        alert("Please fill all required fields.");
+        return;
+      }
 
-      console.log(result)
+      
+      saveFormData(result)
       return result;
+     }catch(err){
+      console.log(err.message)
+     }finally{
+      isLoading=false
+     }
+    }
+
+
+    const saveFormData= async (data)=>{
+       try {
+      isLoading=true
+
+      const res = await fetch('/api/protected/form?q=response', {
+        method:'POST',
+         headers: {
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({response:data, form:page.data.form._id})
+      })
+
+        const data_ = await res.json()
+      if (res.ok) {
+        console.log('User not authenticated: ', res.status);
+        
+        console.log(data_)
+        goto(`/congratulations`)
+      }
+      
+      isLoading=false
+
+     
+      // Dispatch the submit event with form data
+    } catch (error) {
+      isLoading=false
+
+      console.error('Error submitting form:', error);
+    }finally{
+       publishedFormStoreLoading.update(()=>false)
+
+    }
     }
 </script>
 
+<header class="fixed top-0 left-0 w-full backrop-filter shadow-md p-4 z-10 flex justify-between  bg-white">
+  <!-- LOGO -->
+  <img src="/logo-black.svg" alt="Logo" class="w-10 h-10  " />
+  <!-- SIGNUP -->
+  
+</header>
+
+
 <div class="w-full flex flex-col bg-gray-100 p-2  py-20 md:p-10 lg:p-20">
-  <div class="sm:w-full md:w-[60%] lg:w-[50%] m-auto">
-    <form onsubmit={callFormSubmit}>
+  <div class="w-full md:w-[60%] lg:w-[50%] m-auto px-4 md:px-0">
+    <form onsubmit={callFormSubmit} class="space-y-6">
       {#each elements as element (element.id)}
       {@const Component = FormElements[element.component]}
-        <Component {element} />
+        <div class="relative">
+          <Component {element} {isLoading} />
+          {#if element.properties?.required}
+            <span class="absolute top-0 right-0 mt-1 mr-1 w-2 h-2 bg-red-500 rounded-full"></span>
+          {/if}
+        </div>
       {/each}
     </form>
   </div>
   
   <!-- Beautiful Footer -->
-  <footer class="mt-16 pt-8 border-t border-gray-300">
-    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-      <div class="flex items-center">
-        <h3 class="text-2xl font-bold text-gray-600  ">
-          TENX
-        </h3>
-      </div>
-      
-      <div class="text-center md:text-right text-gray-600">
-        <p class="text-gray-600 font-medium">POWERED BY <span class="text-gray-600 font-bold">TENX TECH</span></p>
-        <p class="text-sm text-gray-500 mt-1">© {new Date().getFullYear()} TENX Technology. All rights reserved.</p>
-      </div>
-    </div>
-    
-    <div class="mt-6 flex flex-wrap justify-center  w-full gap-4">
-      <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Home</a>
-      <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">About</a>
-      <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Services</a>
-      <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Contact</a>
-      <a href="#" class="text-gray-600 hover:text-indigo-700 transition-colors duration-300">Privacy Policy</a>
-    </div>
-  </footer>
+  <Footer/>
 </div>

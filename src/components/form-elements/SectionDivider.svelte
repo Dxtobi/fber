@@ -1,5 +1,5 @@
 <script>
-    import { ELEMENT_TYPES } from '$lib/elementTypes';
+    
   
     export let element;
   
@@ -7,13 +7,9 @@
   
   <div
     style={`
-     
+      ${Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
     `}
-    class="section-divider"
+    class=" divider"
   ></div>
   
-  <style>
-    .section-divider {
-      display: block;
-    }
-  </style>
+ 

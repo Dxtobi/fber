@@ -1,6 +1,6 @@
 
   <script>
-	import { updateFormStoreValue } from "../../stores/formStore";
+	import { updateFormStoreValue } from "../../stores/publishedForm";
 
     let {element}=$props();
     // @ts-ignore
@@ -16,7 +16,7 @@
     placeholder={element?.properties?.placeholder || "Enter Here" }
     required={element?.properties?.required ||false}
     style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}
-    class="outline-none select-none" 
+    class="outline-none select-none capitalize" 
     type={element?.properties?.type}
     value={element?.properties.value}
     onchange={handleOnchange}

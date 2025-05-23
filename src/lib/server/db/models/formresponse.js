@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 
-const formResponseSchema = new mongoose.Schema({
+const FormResponseSchema = new mongoose.Schema({
   response: {
     type: [Object], 
     required: true
@@ -16,4 +16,4 @@ const formResponseSchema = new mongoose.Schema({
     timestamps: true,
   });
 
-export default mongoose.model('formResponse', formResponseSchema);
+export const FormResponseModel = mongoose.models.FormResponseModel ?? mongoose.model('FormResponse', FormResponseSchema);

@@ -1,7 +1,9 @@
 <script>
-	import { onMount } from "svelte";
+	
+	import { publishedFormStoreLoading } from "../../stores/publishedForm";
 
     export let element;
+    
   
     // Handle variant styles
     $: variantStyles = {
@@ -41,15 +43,22 @@
       .join('; ');
 
 
-      export let from
+    export let from
+
+    $:console.log($publishedFormStoreLoading)
      
   </script>
   
   <button
     type={element.properties.submit || 'button'}
     style={styleString}
-    class="outline-none select-none transition-colors duration-200"
-    disabled={element.properties.disabled}
+    class="outline-none select-none transition-colors duration-200 hover:opacity-70"
+    disabled={element.properties.disabled||$publishedFormStoreLoading}
   >
-    {element.properties.text || 'Button'}
+    {#if $publishedFormStoreLoading}
+
+        <span class="inline-block h-4 w-4 border-2 border-black border-t-transparent rounded-full animate-spin mr-2"></span>
+    {:else}
+        {element.properties.text || 'Button'}
+    {/if}
   </button>

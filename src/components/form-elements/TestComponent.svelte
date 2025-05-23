@@ -1,7 +1,7 @@
 <script>
 // @ts-nocheck
 
-	import { updateFormStoreValue } from "../../stores/formStore";
+	import { updateFormStoreValue } from "../../stores/publishedForm";
 
   // @ts-nocheck
   let {element}=$props();
@@ -18,11 +18,11 @@
     updateFormStoreValue(element.id, "value", valToSave)
   }
 
-  $effect(()=>{
-     console.log(element)
-  })
+  // $effect(()=>{
+  //   //  console.log(element)
+  // })
 </script>
-
+ <span class="block text-sm font-medium text-gray-500 mb-1 ml-1">{element.properties.label}</span>
 <div style={Object.entries(element.styles || {}).map(([k, v]) => `${k}: ${v}`).join('; ')}>
   <input
     type="text"
