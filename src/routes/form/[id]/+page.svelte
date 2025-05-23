@@ -59,8 +59,8 @@
       }
 
       
-      saveFormData(result)
-      return result;
+      
+      return saveFormData(result);
      }catch(err){
       console.log(err.message)
      }finally{
