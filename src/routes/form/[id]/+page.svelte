@@ -6,6 +6,7 @@
 	import { page } from '$app/state';
 	import { goto } from '$app/navigation';
 	import Footer from '../../../components/landing/Footer.svelte';
+	import Congrats from '../../congratulations/Congrats.svelte';
         
 
     onMount(() => {
@@ -14,7 +15,7 @@
     let elements = $state($publishedFormStore);
     let hasError= $state(false);
     let isLoading= $state(false);
-
+    let show=$state(false);
     publishedFormStore.subscribe((value) => {
       elements = value;
     });
@@ -82,14 +83,15 @@
 
         const data_ = await res.json()
       if (res.ok) {
-        console.log('User not authenticated: ', res.status);
-        
+      
+        publishedFormStore.set([...page.data.form.components]);
         console.log(data_)
         goto(`/congratulations`)
         window.location.href='/congratulations'
+        show=true
+        isLoading=false
       }
       
-      isLoading=false
 
      
       // Dispatch the submit event with form data
@@ -176,8 +178,9 @@
   <!-- SIGNUP -->
   
 </header>
-
-
+{#if show}
+<Congrats/>
+{:else}
 <div class="w-full flex flex-col bg-gray-100 p-2  py-20 md:p-10 lg:p-20">
   <div class="w-full md:w-[60%] lg:w-[50%] m-auto px-4 md:px-0">
     <form onsubmit={callFormSubmit} class="space-y-6">
@@ -196,3 +199,4 @@
   <!-- Beautiful Footer -->
   <Footer/>
 </div>
+{/if}
